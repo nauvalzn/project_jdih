@@ -24,12 +24,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div class="me-1">
-                            <p class="text-heading mb-1">Users</p>
+                            <p class="text-heading mb-1"> Total Pengguna</p>
                             <div class="d-flex align-items-center">
                                 <h4 class="mb-1 me-2">{{ $totalUser }}</h4>
-                                <p class="text-success mb-1">(+29%)</p>
                             </div>
-                            <small class="mb-0">Total Users</small>
                         </div>
                         <div class="avatar">
                             <div class="avatar-initial bg-label-primary rounded-3">
@@ -45,12 +43,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div class="me-1">
-                            <p class="text-heading mb-1">Verified Users</p>
+                            <p class="text-heading mb-1">Pengguna Terverifikasi</p>
                             <div class="d-flex align-items-center">
                                 <h4 class="mb-1 me-1">{{ $verified }}</h4>
-                                <p class="text-success mb-1">(+18%)</p>
                             </div>
-                            <small class="mb-0">Last week analytics</small>
                         </div>
                         <div class="avatar">
                             <div class="avatar-initial bg-label-danger rounded">
@@ -66,12 +62,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div class="me-1">
-                            <p class="text-heading mb-1">Duplicate Users</p>
+                            <p class="text-heading mb-1">Pengguna Duplikat</p>
                             <div class="d-flex align-items-center">
                                 <h4 class="mb-1 me-1">{{ $userDuplicates }}</h4>
-                                <p class="text-danger mb-1">(-14%)</p>
                             </div>
-                            <small class="mb-0">Last week analytics</small>
                         </div>
                         <div class="avatar">
                             <div class="avatar-initial bg-label-success rounded-3">
@@ -87,12 +81,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div class="me-1">
-                            <p class="text-heading mb-1">Verification Pending</p>
+                            <p class="text-heading mb-1">Menunggu Verifikasi</p>
                             <div class="d-flex align-items-center">
                                 <h4 class="mb-1 me-1">{{ $notVerified }}</h4>
-                                <p class="text-success mb-1">(+42%)</p>
                             </div>
-                            <small class="mb-0">Last week analytics</small>
                         </div>
                         <div class="avatar">
                             <div class="avatar-initial bg-label-warning rounded-3">

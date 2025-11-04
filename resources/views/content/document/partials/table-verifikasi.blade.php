@@ -31,9 +31,9 @@
                             @php
                                 $statusColors = [
                                     '0' => 'bg-danger text-white',
-                                    '1' => 'bg-warning text-dark',
+                                    '1' => 'bg-secondary text-dark',
                                     '2' => 'bg-success text-white',
-                                    '3' => 'bg-orange text-white'
+                                    '3' => 'bg-warning text-white'
                                 ];
                                 $statusIcons = [
                                     '0' => 'bi-x-circle-fill',

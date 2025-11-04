@@ -170,11 +170,6 @@ use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/ajax/judul', [DocumentController::class, 'ajaxJudul'])->name('ajax.judul');
 Route::post('/dokumen/store', [DocumentController::class, 'store'])->name('dokumen.store');
-
-// use App\Http\Controllers\VerifikasiController;
-
-// Define a route for kategori dokumen
-
 Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
 Route::get('/keputusan-gubernur', [DocumentController::class, 'keputusanGubernur'])->name('keputusan-gubernur');
 Route::get('/peraturan-direktur', [DocumentController::class, 'peraturanDirektur'])->name('peraturan-direktur');
@@ -185,7 +180,6 @@ Route::get('/sop', [DocumentController::class, 'SOP'])->name('sop');
 Route::get('/editor/{filename}', [App\Http\Controllers\OnlyOfficeController::class, 'edit'])->name('editor.edit');
 
 //authentification
-
 Route::get('/auth/login-basic', function () {
     return view('content.authentications.auth-login-basic');
 })->name('login');
@@ -201,7 +195,6 @@ Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('
 
 // Main Page Route
 Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
-Route::get('/dashboard/crm', [Crm::class, 'index'])->name('dashboard-crm');
 // locale
 Route::get('/lang/{locale}', [LanguageController::class, 'swap']);
 
@@ -217,57 +210,6 @@ Route::get('/layouts/fluid', [Fluid::class, 'index'])->name('layouts-fluid');
 Route::get('/layouts/container', [Container::class, 'index'])->name('layouts-container');
 Route::get('/layouts/blank', [Blank::class, 'index'])->name('layouts-blank');
 
-// Front Pages
-Route::get('/front-pages/landing', [Landing::class, 'index'])->name('front-pages-landing');
-Route::get('/front-pages/pricing', [Pricing::class, 'index'])->name('front-pages-pricing');
-Route::get('/front-pages/payment', [Payment::class, 'index'])->name('front-pages-payment');
-Route::get('/front-pages/checkout', [Checkout::class, 'index'])->name('front-pages-checkout');
-Route::get('/front-pages/help-center', [HelpCenter::class, 'index'])->name('front-pages-help-center');
-Route::get('/front-pages/help-center-article', [HelpCenterArticle::class, 'index'])->name('front-pages-help-center-article');
-
-// apps
-Route::get('/app/email', [Email::class, 'index'])->name('app-email');
-Route::get('/app/chat', [Chat::class, 'index'])->name('app-chat');
-Route::get('/app/calendar', [Calendar::class, 'index'])->name('app-calendar');
-Route::get('/app/kanban', [Kanban::class, 'index'])->name('app-kanban');
-Route::get('/app/ecommerce/dashboard', [EcommerceDashboard::class, 'index'])->name('app-ecommerce-dashboard');
-Route::get('/app/ecommerce/product/list', [EcommerceProductList::class, 'index'])->name('app-ecommerce-product-list');
-Route::get('/app/ecommerce/product/add', [EcommerceProductAdd::class, 'index'])->name('app-ecommerce-product-add');
-Route::get('/app/ecommerce/product/category', [EcommerceProductCategory::class, 'index'])->name('app-ecommerce-product-category');
-Route::get('/app/ecommerce/order/list', [EcommerceOrderList::class, 'index'])->name('app-ecommerce-order-list');
-Route::get('/app/ecommerce/order/details', [EcommerceOrderDetails::class, 'index'])->name('app-ecommerce-order-details');
-Route::get('/app/ecommerce/customer/all', [EcommerceCustomerAll::class, 'index'])->name('app-ecommerce-customer-all');
-Route::get('/app/ecommerce/customer/details/overview', [EcommerceCustomerDetailsOverview::class, 'index'])->name('app-ecommerce-customer-details-overview');
-Route::get('/app/ecommerce/customer/details/security', [EcommerceCustomerDetailsSecurity::class, 'index'])->name('app-ecommerce-customer-details-security');
-Route::get('/app/ecommerce/customer/details/billing', [EcommerceCustomerDetailsBilling::class, 'index'])->name('app-ecommerce-customer-details-billing');
-Route::get('/app/ecommerce/customer/details/notifications', [EcommerceCustomerDetailsNotifications::class, 'index'])->name('app-ecommerce-customer-details-notifications');
-Route::get('/app/ecommerce/manage/reviews', [EcommerceManageReviews::class, 'index'])->name('app-ecommerce-manage-reviews');
-Route::get('/app/ecommerce/referrals', [EcommerceReferrals::class, 'index'])->name('app-ecommerce-referrals');
-Route::get('/app/ecommerce/settings/details', [EcommerceSettingsDetails::class, 'index'])->name('app-ecommerce-settings-details');
-Route::get('/app/ecommerce/settings/payments', [EcommerceSettingsPayments::class, 'index'])->name('app-ecommerce-settings-payments');
-Route::get('/app/ecommerce/settings/checkout', [EcommerceSettingsCheckout::class, 'index'])->name('app-ecommerce-settings-checkout');
-Route::get('/app/ecommerce/settings/shipping', [EcommerceSettingsShipping::class, 'index'])->name('app-ecommerce-settings-shipping');
-Route::get('/app/ecommerce/settings/locations', [EcommerceSettingsLocations::class, 'index'])->name('app-ecommerce-settings-locations');
-Route::get('/app/ecommerce/settings/notifications', [EcommerceSettingsNotifications::class, 'index'])->name('app-ecommerce-settings-notifications');
-Route::get('/app/academy/dashboard', [AcademyDashboard::class, 'index'])->name('app-academy-dashboard');
-Route::get('/app/academy/course', [AcademyCourse::class, 'index'])->name('app-academy-course');
-Route::get('/app/academy/course-details', [AcademyCourseDetails::class, 'index'])->name('app-academy-course-details');
-Route::get('/app/logistics/dashboard', [LogisticsDashboard::class, 'index'])->name('app-logistics-dashboard');
-Route::get('/app/logistics/fleet', [LogisticsFleet::class, 'index'])->name('app-logistics-fleet');
-Route::get('/app/invoice/list', [InvoiceList::class, 'index'])->name('app-invoice-list');
-Route::get('/app/invoice/preview', [InvoicePreview::class, 'index'])->name('app-invoice-preview');
-Route::get('/app/invoice/print', [InvoicePrint::class, 'index'])->name('app-invoice-print');
-Route::get('/app/invoice/edit', [InvoiceEdit::class, 'index'])->name('app-invoice-edit');
-Route::get('/app/invoice/add', [InvoiceAdd::class, 'index'])->name('app-invoice-add');
-Route::get('/app/user/list', [UserList::class, 'index'])->name('app-user-list');
-Route::get('/app/user/view/account', [UserViewAccount::class, 'index'])->name('app-user-view-account');
-Route::get('/app/user/view/security', [UserViewSecurity::class, 'index'])->name('app-user-view-security');
-Route::get('/app/user/view/billing', [UserViewBilling::class, 'index'])->name('app-user-view-billing');
-Route::get('/app/user/view/notifications', [UserViewNotifications::class, 'index'])->name('app-user-view-notifications');
-Route::get('/app/user/view/connections', [UserViewConnections::class, 'index'])->name('app-user-view-connections');
-Route::get('/app/access-roles', [AccessRoles::class, 'index'])->name('app-access-roles');
-Route::get('/app/access-permission', [AccessPermission::class, 'index'])->name('app-access-permission');
-
 // pages
 Route::get('/pages/profile-user', [UserProfile::class, 'index'])->name('pages-profile-user');
 Route::get('/pages/profile-teams', [UserTeams::class, 'index'])->name('pages-profile-teams');
@@ -280,32 +222,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pages/account-settings-security/update-password', [AccountSettingsSecurity::class, 'update'])->name('password.updatesss');
 });
 
-Route::get('/pages/account-settings-billing', [AccountSettingsBilling::class, 'index'])->name('pages-account-settings-billing');
-Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
-Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
-Route::get('/pages/faq', [Faq::class, 'index'])->name('pages-faq');
-Route::get('/pages/pricing', [PagesPricing::class, 'index'])->name('pages-pricing');
-Route::get('/pages/misc-error', [MiscError::class, 'index'])->name('pages-misc-error');
-Route::get('/pages/misc-under-maintenance', [MiscUnderMaintenance::class, 'index'])->name('pages-misc-under-maintenance');
-Route::get('/pages/misc-comingsoon', [MiscComingSoon::class, 'index'])->name('pages-misc-comingsoon');
-Route::get('/pages/misc-not-authorized', [MiscNotAuthorized::class, 'index'])->name('pages-misc-not-authorized');
-Route::get('/pages/misc-server-error', [MiscServerError::class, 'index'])->name('pages-misc-server-error');
 
-// authentication
-Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-basic');
-Route::get('/auth/login-cover', [LoginCover::class, 'index'])->name('auth-login-cover');
-Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
-Route::get('/auth/register-cover', [RegisterCover::class, 'index'])->name('auth-register-cover');
-
-Route::get('/auth/register-multisteps', [RegisterMultiSteps::class, 'index'])->name('auth-register-multisteps');
-Route::get('/auth/verify-email-basic', [VerifyEmailBasic::class, 'index'])->name('auth-verify-email-basic');
-Route::get('/auth/verify-email-cover', [VerifyEmailCover::class, 'index'])->name('auth-verify-email-cover');
-Route::get('/auth/reset-password-basic', [ResetPasswordBasic::class, 'index'])->name('auth-reset-password-basics');
-Route::get('/auth/reset-password-cover', [ResetPasswordCover::class, 'index'])->name('auth-reset-password-cover');
-Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
-Route::get('/auth/forgot-password-cover', [ForgotPasswordCover::class, 'index'])->name('auth-forgot-password-cover');
-Route::get('/auth/two-steps-basic', [TwoStepsBasic::class, 'index'])->name('auth-two-steps-basic');
-Route::get('/auth/two-steps-cover', [TwoStepsCover::class, 'index'])->name('auth-two-steps-cover');
 // === AUTH ===
 // Register
 Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth-register-basic');
@@ -362,9 +279,13 @@ Route::get('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvat
 Route::post('/account/update', [AccountSettingsAccount::class, 'update'])->name('account.update');
 // search
 Route::get('/search', [DocumentController::class, 'search'])->name('search');
-// wizard example
-Route::get('/wizard/ex-checkout', [WizardCheckout::class, 'index'])->name('wizard-ex-checkout');
-Route::get('/wizard/ex-property-listing', [PropertyListing::class, 'index'])->name('wizard-ex-property-listing');
-Route::get('/wizard/ex-create-deal', [CreateDeal::class, 'index'])->name('wizard-ex-create-deal');
 
 Route::resource('/user-list', UserManagement::class);
+Route::get('/app/user/list', [UserList::class, 'index'])->name('app-user-list');
+Route::get('/app/user/view/account', [UserViewAccount::class, 'index'])->name('app-user-view-account');
+Route::get('/app/user/view/security', [UserViewSecurity::class, 'index'])->name('app-user-view-security');
+Route::get('/app/user/view/billing', [UserViewBilling::class, 'index'])->name('app-user-view-billing');
+Route::get('/app/user/view/notifications', [UserViewNotifications::class, 'index'])->name('app-user-view-notifications');
+Route::get('/app/user/view/connections', [UserViewConnections::class, 'index'])->name('app-user-view-connections');
+Route::get('/app/access-roles', [AccessRoles::class, 'index'])->name('app-access-roles');
+Route::get('/app/access-permission', [AccessPermission::class, 'index'])->name('app-access-permission');

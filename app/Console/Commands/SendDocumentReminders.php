@@ -10,46 +10,53 @@ use Carbon\Carbon;
 
 class SendDocumentReminders extends Command
 {
-    protected $signature = 'reminders:send';
-    protected $description = 'Send document reminders (6 months before period expires)';
+    protected $signature = 'reminders:send {--email=* : Email penerima reminder (default dari user)}';
+    protected $description = 'Send document reminders (human readable months + days)';
 
     public function handle()
     {
         $today = Carbon::now('Asia/Jakarta');
 
-        // Ambil dokumen Perizinan yang diverifikasi
-        $documents = Document::where('jenis_dokumen', 5)
-            ->where('status_verifikasi', 2)
-            ->get();
+        $emails = $this->option('email');
+        if (empty($emails)) {
+            $emails = ['muhammad.sihabuddin259@smk.belajar.id'];
+        }
+
+        $documents = Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get();
 
         foreach ($documents as $document) {
             if (!$document->periode_berlaku) {
                 continue;
             }
 
-            $expiredAt = Carbon::parse($document->tanggal_penetapan)
-                ->addYears($document->periode_berlaku);
+            $expiredAt = Carbon::parse($document->tanggal_penetapan)->addYears($document->periode_berlaku);
 
-            $reminderAt = $expiredAt->copy()->subMonths(6);
+            $totalDays = (int) Carbon::now()->diffInDays($expiredAt, false);
 
-            // 🔹 Kirim reminder jika hari ini sudah sama atau lewat tanggal reminder, tapi dokumen belum expired
-            if ($today->greaterThanOrEqualTo($reminderAt) && $today->lessThan($expiredAt)) {
-                
-                $monthsLeft = $today->diffInMonths($expiredAt, false);
-                $monthsLeft = (int) round($monthsLeft);
-
-                if ($monthsLeft < 0) {
-                    $monthsText = 'sudah expired ' . abs($monthsLeft) . ' bulan yang lalu';
-                } elseif ($monthsLeft > 0) {
-                    $monthsText = 'akan expired ' . $monthsLeft . ' bulan lagi';
-                } else {
-                    $monthsText = 'akan expired bulan ini';
-                }
-
-                Mail::to('rsudkesjaprovjabar@gmail.com')->send(new DocumentReminderMail($document, $monthsText, $expiredAt));
-                $this->info("Pengingat dikirimkan untuk dokumen : '{$document->judul}' ({$monthsText})");
+            if ($totalDays < 0) {
+                $text = 'sudah expired ' . abs($totalDays) . ' hari yang lalu';
+            } elseif ($totalDays < 30) {
+                $text = 'akan expired ' . $totalDays . ' hari lagi';
             } else {
-                $this->info("Belum waktunya reminder untuk dokumen: '{$document->judul}' (ReminderAt: {$reminderAt->toDateString()})");
+                // Hitung bulan + sisa hari presisi kalender
+                $months = 0;
+                $tempDate = Carbon::now();
+                while ($tempDate->addMonth()->lessThanOrEqualTo($expiredAt)) {
+                    $months++;
+                }
+                $tempDate = Carbon::now()->addMonths($months);
+                $days = $tempDate->diffInDays($expiredAt);
+
+                if ($days > 0) {
+                    $text = "akan expired {$months} bulan {$days} hari lagi";
+                } else {
+                    $text = "akan expired {$months} bulan lagi";
+                }
+            }
+
+            foreach ($emails as $email) {
+                Mail::to($email)->send(new DocumentReminderMail($document, $text, $expiredAt));
+                $this->info("Pengingat dikirimkan ke: {$email} untuk dokumen '{$document->judul}' ({$text})");
             }
         }
 

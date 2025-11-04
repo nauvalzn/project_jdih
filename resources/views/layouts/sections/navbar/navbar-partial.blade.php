@@ -51,7 +51,7 @@
                                     // Cek dokumen belum expired
                                     ->whereRaw('DATE_ADD(tanggal_penetapan, INTERVAL periode_berlaku YEAR) >= ?', [
                                         now(),
-                                    ])
+                                    ])  
                                     // Opsional: cuma yang mendekati expired 6 bulan terakhir
                                     ->whereRaw('DATE_ADD(tanggal_penetapan, INTERVAL periode_berlaku YEAR) <= ?', [
                                         now()->addMonths(6),
@@ -101,7 +101,7 @@
         {{-- Kalau guest (opsional, bisa diaktifkan lagi kalau perlu) --}}
         @guest
             <li class="nav-item me-2">
-                <a href="{{ route('auth-login-basic') }}" class="btn btn-outline-primary">Login</a>
+                <a href="{{ route('login') }}" class="btn btn-outline-primary">Login</a>
             </li>
             <li class="nav-item">
                 <a href="{{ route('auth-register-basic') }}" class="btn btn-primary">Register</a>
