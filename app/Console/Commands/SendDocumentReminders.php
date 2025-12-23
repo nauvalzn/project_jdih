@@ -22,30 +22,35 @@ class SendDocumentReminders extends Command
             $emails = ['muhammad.sihabuddin259@smk.belajar.id'];
         }
 
-        $documents = Document::where('jenis_dokumen', 5)->where('status_verifikasi', 2)->get();
+        $documents = Document::where('jenis_dokumen', 5)
+            ->where('status_verifikasi', 2)
+            ->get();
 
         foreach ($documents as $document) {
             if (!$document->periode_berlaku) {
                 continue;
             }
 
-            $expiredAt = Carbon::parse($document->tanggal_penetapan)->addYears($document->periode_berlaku);
+            $expiredAt = Carbon::parse($document->tanggal_penetapan)
+                ->addYears($document->periode_berlaku);
 
-            $totalDays = (int) Carbon::now()->diffInDays($expiredAt, false);
+            $totalDays = $today->diffInDays($expiredAt, false);
 
             if ($totalDays < 0) {
                 $text = 'sudah expired ' . abs($totalDays) . ' hari yang lalu';
             } elseif ($totalDays < 30) {
                 $text = 'akan expired ' . $totalDays . ' hari lagi';
             } else {
-                // Hitung bulan + sisa hari presisi kalender
+                // Hitung bulan dan sisa hari dengan hasil integer
                 $months = 0;
-                $tempDate = Carbon::now();
+                $tempDate = $today->copy();
+
                 while ($tempDate->addMonth()->lessThanOrEqualTo($expiredAt)) {
                     $months++;
                 }
-                $tempDate = Carbon::now()->addMonths($months);
-                $days = $tempDate->diffInDays($expiredAt);
+
+                $tempDate = $today->copy()->addMonths($months);
+                $days = (int) floor($tempDate->diffInDays($expiredAt));
 
                 if ($days > 0) {
                     $text = "akan expired {$months} bulan {$days} hari lagi";

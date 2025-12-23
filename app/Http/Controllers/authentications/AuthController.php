@@ -51,21 +51,6 @@ public function register(Request $request)
             'password' => 'required|string',
             'captcha' => 'required|captcha',
         ]);
-
-        // // ✅ Verifikasi reCAPTCHA manual
-        // $token = $request->input('g-recaptcha-response');
-        // $verify = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-        //     'secret'   => config('captcha.secret'),
-        //     'response' => $token,
-        //     'remoteip' => $request->ip(),
-        // ])->json();
-
-        // if (!($verify['success'] ?? false)) {
-        //     return back()->withErrors([
-        //         'g-recaptcha-response' => 'Verifikasi reCAPTCHA gagal, coba lagi ya.',
-        //     ])->withInput();
-        // }
-
         // ✅ Cek kredensial login
         $credentials = $request->only('nip', 'password');
 

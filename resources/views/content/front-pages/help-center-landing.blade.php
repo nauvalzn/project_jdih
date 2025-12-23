@@ -16,39 +16,29 @@
     }
 </script>
 @endsection
-
 @section('content')
     <!-- Help Center Header: Start -->
     <section class="section-py first-section-pt help-center-header position-relative overflow-hidden">
         <img class="banner-bg-img z-n1" src="{{ asset('assets/img/pages/header-' . $configData['theme'] . '.png') }}"
             alt="Help center header" data-app-light-img="pages/header-light.png" data-app-dark-img="pages/header-dark.png" />
-
         <h4 class="text-center text-primary">Cari Dokumen Perijinan & Aturan</h4>
-
         <!-- Search Form -->
         <form action="{{ route('search') }}" method="GET"
             class="input-wrapper my-4 input-group input-group-merge position-relative mx-auto z-0" style="max-width: 480px;">
-
-
             <span class="input-group-text">
                 <i class="ri ri-search-line"></i>
             </span>
-
             <input type="text" name="q" class="form-control" placeholder="Search dokumen..."
                 value="{{ request('q') }}" required>
-
             <button class="btn btn-primary" type="submit">
                 Cari
             </button>
         </form>
-
-
         <p class="text-center px-4 mb-0">Platform ini menyediakan akses terbuka bagi masyarakat untuk menelusuri dokumen
             regulasi dari RSUD Kesehatan Kerja, <br> termasuk Peraturan Gubernur, Keputusan Direktur, dokumen Perizinan, dan
             Standar Operasional Prosedur (SOP)</p>
     </section>
     <!-- Help Center Header: End -->
-
     <!-- Regulasi & Pedoman Perijinan -->
     <section class="section-py">
         <div class="container">
@@ -69,7 +59,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Keputusan Gubernur -->
                 <div class="col-6 col-md-2">
                     <div class="card border shadow-sm h-100 text-center">
@@ -85,7 +74,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Peraturan Direktur -->
                 <div class="col-6 col-md-2">
                     <div class="card border shadow-sm h-100 text-center">
@@ -101,7 +89,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- Keputusan Direktur -->
                 <div class="col-6 col-md-2">
                     <div class="card border shadow-sm h-100 text-center">
@@ -116,9 +103,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <!-- Perizinan -->
                 <div class="col-6 col-md-2">
                     <div class="card border shadow-sm h-100 text-center">
@@ -132,7 +116,6 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- SOP -->
                 <div class="col-6 col-md-2">
                     <div class="card border shadow-sm h-100 text-center">
@@ -146,27 +129,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
-
-    <!-- Popular Articles: End -->
-
-    <!-- Hover Style -->
-    {{-- <style>
-  .card:hover {
-    transform: translateY(-5px);
-    transition: 0.3s;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-  }
-  .card p {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; 
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style> --}}
 
     <div class="container mb-6">
         <div class="row">
@@ -200,15 +165,10 @@
             </div>
         </div>
     </div>
-
-
     <!-- Kolom Kanan (kosong dulu) -->
     <div class="col-md-6">
         <!-- Konten lain nanti -->
     </div>
     </div>
     </div>
-
-
-
 @endsection

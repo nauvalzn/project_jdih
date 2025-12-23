@@ -1,5 +1,4 @@
 @extends('layouts.autoLayout')
-
 @section('page-content')
     <div class="container">
         <div class="row">
@@ -13,7 +12,6 @@
                     $isPdf = $extension === 'pdf';
                     $isOffice = in_array($extension, ['docx', 'xlsx', 'pptx']);
                 @endphp
-
                 @if ($filePath)
                     @if ($isPdf)
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -51,7 +49,6 @@
                 @else
                     <p class="text-muted">Belum ada file diunggah.</p>
                 @endif
-
                 <!-- Catatan & Tombol Aksi -->
                 <form action="{{ route('documents.updateStatusVerifikasi', $document->id) }}" method="POST">
                     @csrf
@@ -59,7 +56,6 @@
                     <div class="mt-4 card p-3 shadow-sm">
                         <h6><strong>Catatan Verifikasi</strong></h6>
                         <textarea name="catatan_admin" class="form-control mb-3" rows="4" placeholder="Tuliskan catatan di sini...">{{ old('catatan', $document->catatan_verifikasi ?? '') }}</textarea>
-
                         <div class="d-flex gap-2">
                             <button type="submit" name="status_verifikasi" value="0" class="btn btn-secondary">❌
                                 Batal</button>
@@ -71,7 +67,6 @@
                     </div>
                 </form>
             </div>
-
             <!-- Kolom Kanan: Informasi Dokumen -->
             <div class="col-md-4">
                 <h5>Informasi Dokumen</h5>
@@ -118,7 +113,6 @@
                                 $showItem = $value; // field lain tetap cek value
                             }
                         @endphp
-
                         @if ($showItem)
                             <li class="list-group-item">
                                 <strong>{{ $label }}:</strong>
@@ -132,12 +126,10 @@
                             </li>
                         @endif
                     @endforeach
-
                 </ul>
             </div>
         </div>
     </div>
-
     @if ($isPdf && $filePath)
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
         <script>
@@ -149,7 +141,6 @@
                 scale = 1.5;
             const canvas = document.getElementById('pdf-render'),
                 ctx = canvas.getContext('2d');
-
             const renderPage = num => {
                 pageIsRendering = true;
                 pdfDoc.getPage(num).then(page => {
@@ -172,9 +163,7 @@
                     document.getElementById('page-count').textContent = pdfDoc.numPages;
                 });
             };
-
             const queueRenderPage = num => pageIsRendering ? pageNumIsPending = num : renderPage(num);
-
             document.getElementById('prev-page').addEventListener('click', () => {
                 if (pageNum > 1) {
                     pageNum--;
@@ -204,7 +193,6 @@
                     queueRenderPage(pageNum);
                 }
             });
-
             pdfjsLib.getDocument(url).promise.then(pdf => {
                 pdfDoc = pdf;
                 renderPage(pageNum);

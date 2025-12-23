@@ -1,5 +1,4 @@
 @extends('layouts.layoutMaster')
-
 @section('page-style')
 <style>
     .table thead {
@@ -34,7 +33,6 @@
     }
 </style>
 @endsection
-
 @section('page-script')
 <script>
     function goToPage(form) {
@@ -50,13 +48,11 @@
     }
 </script>
 @endsection
-
 @section('content')
 <div class="container py-4">
     <div class="card">
         <div class="card-header bg-white d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
             <h4 class="fw-bold mb-2 mb-md-0">Daftar Dokumen <i>(terverifikasi)</i></h4>
-
             <div class="d-flex gap-2 flex-wrap">
                 <form action="{{ route('documents.index') }}" method="GET" class="d-flex flex-grow-1 flex-md-grow-0 gap-2">
                     <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari dokumen..." value="{{ request('search') }}">
@@ -69,7 +65,6 @@
                 </a>
             </div>
         </div>
-
         <div class="card-body p-2 p-md-3">
             <div class="table-responsive">
                 <table class="table align-middle table-hover">
@@ -129,7 +124,6 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- Pagination -->
             <div class="d-flex justify-content-between flex-wrap align-items-center mt-3 gap-2">
                 <div class="d-flex gap-1 align-items-center">
@@ -138,11 +132,9 @@
                     @else
                         <a href="{{ $documents->previousPageUrl() }}" class="btn btn-outline-secondary">&laquo;</a>
                     @endif
-
                     <form method="GET" class="d-flex align-items-center" onsubmit="return goToPage(this)">
                         <input type="number" name="page" min="1" max="{{ $documents->lastPage() }}" value="{{ $documents->currentPage() }}" class="form-control form-control-sm text-center" style="width:60px;">
                     </form>
-
                     @if ($documents->hasMorePages())
                         <a href="{{ $documents->nextPageUrl() }}" class="btn btn-outline-secondary">&raquo;</a>
                     @else

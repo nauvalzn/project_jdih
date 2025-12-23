@@ -1,12 +1,9 @@
 @extends('layouts.autoLayout')
-
 @section('title', 'Peraturan Direktur - RSKK')
-
 @section('content')
 <section class="section-py first-section-pt py-4 mt-5">
     <div class="container">
         <div class="row g-4">
-
             <!-- Konten Utama -->
             <div class="col-lg-9 col-12 order-lg-1 order-2">
                 <!-- Breadcrumb -->
@@ -16,12 +13,10 @@
                         <li class="breadcrumb-item active">Peraturan Direktur</li>
                     </ol>
                 </nav>
-
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="mb-0">Dokumen Peraturan Direktur</h4>
                     <button onclick="window.history.back()" class="btn btn-outline-primary">⬅ Kembali</button>
                 </div>
-
                 <!-- Search -->
                 <form action="{{ route('peraturan-direktur') }}" method="GET" class="mb-4">
                     <div class="input-group input-group-merge">
@@ -29,7 +24,6 @@
                         <input type="text" name="q" class="form-control" placeholder="Cari dokumen..." value="{{ request('q') }}">
                     </div>
                 </form>
-
                 <!-- Table -->
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-2 p-md-3">
@@ -75,7 +69,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                         <!-- Pagination -->
                         <div class="d-flex justify-content-between align-items-center flex-wrap mt-3 gap-2">
                             <div class="d-flex gap-1">
@@ -84,11 +77,9 @@
                                 @else
                                     <a href="{{ $peraturanDirektur->previousPageUrl() }}" class="btn btn-outline-secondary">&laquo;</a>
                                 @endif
-
                                 <form method="GET" class="d-flex" onsubmit="return goToPage(this)">
                                     <input type="number" name="page" min="1" max="{{ $peraturanDirektur->lastPage() }}" value="{{ $peraturanDirektur->currentPage() }}" class="form-control form-control-sm text-center" style="width:60px;">
                                 </form>
-
                                 @if ($peraturanDirektur->hasMorePages())
                                     <a href="{{ $peraturanDirektur->nextPageUrl() }}" class="btn btn-outline-secondary">&raquo;</a>
                                 @else
@@ -101,7 +92,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Sidebar -->
             <div class="col-lg-3 col-12 order-lg-2 order-1">
                 <div class="bg-lightest py-2 px-3 rounded mb-3">
@@ -127,7 +117,6 @@
                     </ul>
                 @endforeach
             </div>
-
         </div>
     </div>
 </section>

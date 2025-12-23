@@ -2,23 +2,17 @@
     $configData = Helper::appClasses();
     $customizerHidden = 'customizer-hide';
 @endphp
-
 @extends('layouts.layoutMaster')
-
 @section('title', 'Login Basic - Pages')
-
 @section('vendor-style')
     @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])
 @endsection
-
 @section('page-style')
     @vite(['resources/assets/vendor/scss/pages/page-auth.scss'])
 @endsection
-
 @section('vendor-script')
     @vite(['resources/assets/vendor/libs/@form-validation/popular.js', 'resources/assets/vendor/libs/@form-validation/bootstrap5.js', 'resources/assets/vendor/libs/@form-validation/auto-focus.js'])
 @endsection
-
 @section('page-script')
     @vite(['resources/assets/js/pages-auth.js'])
     <script>
@@ -31,7 +25,6 @@
     });
     </script>
 @endsection
-
 @section('content')
     <div class="position-relative">
         <div class="authentication-wrapper authentication-basic container-p-y p-4 p-sm-0">
@@ -46,21 +39,17 @@
                         </a>
                     </div>
                     <!-- /Logo -->
-
                     <div class="card-body mt-1">
                         <h4 class="mb-1">Selamat Datang ! 👋</h4>
                         <p class="mb-5">Silakan masuk ke akun Anda</p>
-
                         <form id="formAuthentication" class="mb-5" action="{{ route('auth.login') }}" method="POST">
                             @csrf
-
                             <!-- NIP -->
                             <div class="form-floating form-floating-outline mb-5 form-control-validation">
                                 <input type="text" class="form-control" id="nip" name="nip"
                                     placeholder="Masukkan NIP Anda" autofocus />
                                 <label for="nip">NIP</label>
                             </div>
-
                             <!-- Password -->
                             <div class="mb-5">
                                 <div class="form-password-toggle form-control-validation">
@@ -75,7 +64,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- CAPTCHA ketik -->
                             <div class="mb-5">
                                 <img src="{{ captcha_src() }}" alt="captcha" class="mb-3">
@@ -90,33 +78,11 @@
                                     <div style="color:red">{{ $message }}</div>
                                 @enderror
                             </div>
-
-                            <!-- Remember Me & Forgot Password -->
-                            {{-- <div class="mb-5 d-flex justify-content-between mt-5">
-              <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember-me" />
-                <label class="form-check-label" for="remember-me"> Ingat Saya </label>
-              </div>
-              <a href="{{ url('auth/forgot-password-basic') }}" class="float-end mb-1 mt-2">
-                <span>Lupa Password?</span>
-              </a>
-            </div> --}}
-
                             <!-- Submit -->
                             <div class="mb-5">
                                 <button class="btn btn-primary d-grid w-100" type="submit">Masuk</button>
                             </div>
                         </form>
-
-                        <!-- Register -->
-                        {{-- <p class="text-center mb-5">
-            <span>Baru di aplikasi kami?</span>
-            <a href="{{ url('auth/register-basic') }}">
-              <span>Buat akun baru mu!</span>
-            </a>
-          </p> --}}
-
-
                     </div>
                 </div>
                 <!-- /Login -->
@@ -129,7 +95,4 @@
             </div>
         </div>
     </div>
-
-
-
 @endsection

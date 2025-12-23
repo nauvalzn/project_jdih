@@ -1,17 +1,13 @@
 @extends('layouts.layoutMaster')
-
 @section('title', 'Tambah Dokumen')
-
 <!-- Vendor Styles -->
 @section('vendor-style')
     @vite(['resources/assets/vendor/libs/select2/select2.scss', 'resources/assets/vendor/libs/tagify/tagify.scss', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.scss', 'resources/assets/vendor/libs/typeahead-js/typeahead.scss'])
 @endsection
-
 <!-- Vendor Scripts -->
 @section('vendor-script')
     @vite(['resources/assets/vendor/libs/select2/select2.js', 'resources/assets/vendor/libs/tagify/tagify.js', 'resources/assets/vendor/libs/bootstrap-select/bootstrap-select.js', 'resources/assets/vendor/libs/typeahead-js/typeahead.js', 'resources/assets/vendor/libs/bloodhound/bloodhound.js'])
 @endsection
-
 <!-- Page Scripts -->
 @section('page-script')
     @vite(['resources/assets/js/forms-selects.js', 'resources/assets/js/forms-tagify.js', 'resources/assets/js/forms-typeahead.js'])
@@ -43,7 +39,6 @@
                 },
                 minimumInputLength: 1
             });
-
             // Toggle keterangan sesuai status
             function toggleKeterangan() {
                 let status = $('#status').val();
@@ -59,14 +54,11 @@
                     $('#keterangan').prop('required', false);
                 }
             }
-
             // Event saat status berubah
             $('#status').on('change', toggleKeterangan);
-
             // Jalankan sekali saat halaman load
             toggleKeterangan();
         });
-
         // Toggle Periode Berlaku jika jenis_dokumen = 5
         function togglePeriodeBerlaku() {
             let jenis = $('#jenis_dokumen').val();
@@ -78,21 +70,17 @@
                 $('#periode_berlaku').prop('required', false);
             }
         }
-
         // Event saat jenis_dokumen berubah
         $('#jenis_dokumen').on('change', togglePeriodeBerlaku);
-
         // Jalankan sekali saat halaman load
         togglePeriodeBerlaku();
     </script>
 @endsection
-
 @section('content')
     <div class="container">
         <h2>Tambah Dokumen</h2>
         <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
             <div class="row">
                 <!-- Kolom Kiri -->
                 <div class="col-md-6">
@@ -100,7 +88,6 @@
                         <label for="pdf_file">Upload File PDF</label>
                         <input type="file" name="pdf_file" id="pdf_file" class="form-control" accept=".pdf" required>
                     </div>
-
                     @if ($jenisReferensi && $tipeDokumen->count() > 0)
                         <div class="mb-3">
                             <label for="tipe_dokumen">{{ $jenisReferensi->deskripsi }}</label>
@@ -114,7 +101,6 @@
                             </select>
                         </div>
                     @endif
-
                     @if ($jenisReferensi1 && $bidangHukum->count() > 0)
                         <div class="mb-3">
                             <label for="bidang_hukum">{{ $jenisReferensi1->deskripsi }}</label>
@@ -128,7 +114,6 @@
                             </select>
                         </div>
                     @endif
-
                     @if ($jenisReferensi2 && $jenisHukum->count() > 0)
                         <div class="mb-3">
                             <label for="jenis_hukum">{{ $jenisReferensi2->deskripsi }}</label>
@@ -142,7 +127,6 @@
                             </select>
                         </div>
                     @endif
-
                     @if ($jenisReferensi3 && $jenisDokumen->count() > 0)
                         <div class="mb-3">
                             <label for="jenis_dokumen">{{ $jenisReferensi3->deskripsi }}</label>
@@ -156,19 +140,16 @@
                             </select>
                         </div>
                     @endif
-
                     <div class="mb-3">
                         <label for="singkatan">Singkatan</label>
                         <input type="text" name="singkatan" id="singkatan" class="form-control"
                             value="{{ old('singkatan') }}" required>
                     </div>
-
                     <div class="mb-3">
                         <label for="nomor">Nomor</label>
                         <input type="text" name="nomor" id="nomor" class="form-control" value="{{ old('nomor') }}"
                             required>
                     </div>
-
                     <div class="mb-3">
                         <label for="tahun">Tahun</label>
                         <select name="tahun" id="tahun" class="form-control">
@@ -177,20 +158,17 @@
                             @endfor
                         </select>
                     </div>
-
                     <div class="mb-3">
                         <label for="judul">Judul</label>
                         <input type="text" name="judul" id="judul" class="form-control"
                             value="{{ old('judul') }}" required>
                     </div>
-
                     <div class="mb-3">
                         <label for="tempat_penetapan">Tempat Penetapan</label>
                         <input type="text" name="tempat_penetapan" id="tempat_penetapan" class="form-control"
                             value="{{ old('tempat_penetapan') }}">
                     </div>
                 </div>
-
                 <!-- Kolom Kanan -->
                 <div class="col-md-6">
                     <div class="mb-3">
@@ -198,13 +176,11 @@
                         <input type="date" name="tanggal_penetapan" id="tanggal_penetapan" class="form-control"
                             value="{{ old('tanggal_penetapan') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="tanggal_pengundangan">Tanggal Pengundangan</label>
                         <input type="date" name="tanggal_pengundangan" id="tanggal_pengundangan" class="form-control"
                             value="{{ old('tanggal_pengundangan') }}">
                     </div>
-
                     <div class="mb-3" id="periode_berlaku_wrapper" style="display: none;">
                         <label for="periode_berlaku">Periode Berlaku</label>
                         <select name="periode_berlaku" id="periode_berlaku" class="form-control">
@@ -215,50 +191,41 @@
                             @endfor
                         </select>
                     </div>
-
-
                     <div class="mb-3">
                         <label for="sumber">Sumber</label>
                         <input type="text" name="sumber" id="sumber" class="form-control"
                             value="{{ old('sumber') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="subjek">Subjek</label>
                         <input type="text" name="subjek" id="subjek" class="form-control"
                             value="{{ old('subjek') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="bahasa">Bahasa</label>
                         <input type="text" name="bahasa" id="bahasa" class="form-control"
                             value="{{ old('bahasa') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="lokasi">Lokasi</label>
                         <input type="text" name="lokasi" id="lokasi" class="form-control"
                             value="{{ old('lokasi') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="urusan_pemerintahan">Urusan Pemerintahan</label>
                         <input type="text" name="urusan_pemerintahan" id="urusan_pemerintahan" class="form-control"
                             value="{{ old('urusan_pemerintahan') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="penandatanganan">Penandatanganan</label>
                         <input type="text" name="penandatanganan" id="penandatanganan" class="form-control"
                             value="{{ old('penandatanganan') }}">
                     </div>
-
                     <div class="mb-3">
                         <label for="pemrakarsa">Pemrakarsa</label>
                         <input type="text" name="pemrakarsa" id="pemrakarsa" class="form-control"
                             value="{{ old('pemrakarsa') }}">
                     </div>
-
                     @if ($jenisReferensi4 && $statusDokumen->count() > 0)
                         <div class="mb-3">
                             <label for="status">{{ $jenisReferensi4->deskripsi }}</label>
@@ -272,13 +239,11 @@
                             </select>
                         </div>
                     @endif
-
                     <div class="keterangan-status-wrapper mb-3">
                         <label for="keterangan_dokumen">Keterangan Status</label>
                         <input type="text" name="keterangan_dokumen" id="keterangan_dokumen"
                             class="form-control"value="{{ old('keterangan_dokumen') }}">
                     </div>
-
                     <div class="keterangan-wrapper mb-3">
                         <label for="keterangan" class="form-label">Keterangan Dokumen</label>
                         <select name="keterangan_id" id="keterangan" class="form-control select2">
@@ -293,7 +258,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="text-end mt-3">
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>

@@ -1,10 +1,8 @@
 @extends('layouts.autoLayout') <!-- ganti blankLayout supaya konsisten layout lainnya -->
 @section('title', 'Hasil Pencarian - RSKK')
-
 @section('content')
 <section class="section-py first-section-pt py-4 mt-5">
     <div class="container">
-
         <!-- Search Form -->
         <form action="{{ route('search') }}" method="GET"
             class="input-wrapper my-4 input-group input-group-merge mx-auto" style="max-width: 480px;">
@@ -12,12 +10,10 @@
             <input type="text" name="q" class="form-control" placeholder="Search dokumen..." value="{{ request('q') }}" required>
             <button class="btn btn-primary" type="submit">Cari</button>
         </form>
-
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Hasil Pencarian untuk: <strong>{{ $q }}</strong></h4>
             <button onclick="goBackToStart()" class="btn btn-outline-primary">⬅ Kembali</button>
         </div>
-
         @if ($results->isEmpty())
             <p class="text-muted mt-3">Nggak ada dokumen yang cocok dengan pencarian kamu.</p>
         @else
@@ -62,7 +58,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between flex-wrap align-items-center mt-3 gap-2">
                     <div class="d-flex gap-1 align-items-center">
@@ -71,11 +66,9 @@
                         @else
                             <a href="{{ $results->previousPageUrl() }}" class="btn btn-outline-secondary">&laquo;</a>
                         @endif
-
                         <form method="GET" class="d-flex align-items-center" onsubmit="return goToPage(this)">
                             <input type="number" name="page" min="1" max="{{ $results->lastPage() }}" value="{{ $results->currentPage() }}" class="form-control form-control-sm text-center" style="width:60px;">
                         </form>
-
                         @if ($results->hasMorePages())
                             <a href="{{ $results->nextPageUrl() }}" class="btn btn-outline-secondary">&raquo;</a>
                         @else
@@ -90,7 +83,6 @@
     </div>
 </section>
 @endsection
-
 @section('page-script')
 <script>
     function goBackToStart() {

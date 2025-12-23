@@ -1,18 +1,14 @@
 @extends('layouts.layoutMaster')
 @section('title', 'Masa Berlaku Dokumen Perizinan')
-
 @section('vendor-style')
     @vite(['resources/assets/vendor/libs/@form-validation/form-validation.scss'])
 @endsection
-
 @section('page-style')
     @vite(['resources/assets/vendor/scss/pages/page-auth.scss'])
 @endsection
-
 @section('vendor-script')
     @vite(['resources/assets/vendor/libs/@form-validation/popular.js', 'resources/assets/vendor/libs/@form-validation/bootstrap5.js', 'resources/assets/vendor/libs/@form-validation/auto-focus.js'])
 @endsection
-
 @section('page-script')
     @vite(['resources/assets/js/pages-auth.js'])
 @endsection
@@ -22,13 +18,11 @@
 @section('content')
     <div class="container mt-4">
         <h4 class="mb-4">Masa Berlaku Dokumen</h4>
-
         @if ($documents->count() > 0)
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach ($documents as $doc)
                     @php
                         $tanggalPenetapan = Carbon::parse($doc->tanggal_penetapan)->startOfDay();
-
                         if ($doc->jenis_dokumen == 5 && $doc->periode_berlaku) {
                             // Expired = tanggal penetapan + periode_berlaku tahun
                             $expiredAt = $tanggalPenetapan->copy()->addYears($doc->periode_berlaku);
@@ -36,7 +30,6 @@
                             // Dokumen lain bisa tetap 6 bulan dari penetapan (opsional)
                             $expiredAt = $tanggalPenetapan->copy()->addMonths(6);
                         }
-
                         // Selisih hari dari sekarang
                         // Selisih hari dari sekarang, pastikan bulat
                         $daysLeft = (int) Carbon::now()->diffInDays($expiredAt, false);
@@ -52,9 +45,6 @@
                             $badgeClass = 'bg-warning text-dark';
                         }
                     @endphp
-
-
-
                     <div class="col d-flex">
                         <div class="card shadow-sm border-0 flex-fill">
                             <div class="card-body d-flex flex-column">
@@ -69,7 +59,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 @endforeach
             </div>

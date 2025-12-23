@@ -2,30 +2,22 @@
     $configData = Helper::appClasses();
     use Illuminate\Support\Facades\Auth;
 @endphp
-
 @extends('layouts.layoutMaster')
-
 @section('title', 'Dashboard Analisis Dokumen')
-
 @section('vendor-style')
     @vite(['resources/assets/vendor/libs/apex-charts/apex-charts.scss', 'resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss', 'resources/assets/vendor/libs/swiper/swiper.scss'])
 @endsection
-
 @section('page-style')
     @vite(['resources/assets/vendor/scss/pages/cards-statistics.scss'])
 @endsection
-
 @section('vendor-script')
     @vite(['resources/assets/vendor/libs/apex-charts/apexcharts.js', 'resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js', 'resources/assets/vendor/libs/swiper/swiper.js'])
 @endsection
-
 @section('page-script')
     @vite(['resources/assets/js/dashboards-analytics.js'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection
-
 @section('content')
-
     {{-- 👋 Header Greeting --}}
     <div class="row g-6">
         <div class="col-12">
@@ -53,7 +45,6 @@
             </div>
         </div>
     </div>
-
     @if (auth()->user()->role !== 'operator')
         {{-- 📅 Filter Periode --}}
         <div class="card shadow-sm border-0 mb-4 mt-4">
@@ -88,7 +79,6 @@
                 </div>
             </div>
         </div>
-
         {{-- 📊 Top Small Cards --}}
         <div class="row g-3 mt-2">
             {{-- Total Akses --}}
@@ -103,7 +93,6 @@
                     </div>
                 </div>
             </div>
-
             {{-- Dokumen Unik --}}
             <div class="col-md-3 col-6">
                 <div class="card p-2 rounded-3 shadow-sm" style="background-color: #fff9ea; min-height: auto;">
@@ -122,7 +111,6 @@
                     </div>
                 </div>
             </div>
-
             {{-- Pengguna Unik --}}
             <div class="col-md-3 col-6">
                 <div class="card p-2 rounded-3 shadow-sm" style="background-color: #f0fff6; min-height: auto;">
@@ -141,7 +129,6 @@
                     </div>
                 </div>
             </div>
-
             {{-- Rata-rata Akses --}}
             <div class="col-md-3 col-6">
                 <div class="card p-2 rounded-3 shadow-sm" style="background-color: #eef9ff; min-height: auto;">
@@ -157,13 +144,11 @@
                 </div>
             </div>
         </div>
-
         <div class="modal fade" id="modalUserUnik" tabindex="-1" aria-labelledby="modalUserUnikLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header d-flex justify-content-between align-items-center">
                         <h5 class="modal-title" id="modalUserUnikLabel">Daftar Pengguna Unik</h5>
-
                         <div class="d-flex gap-2">
                             <a href="{{ route('dashboard.analytics.users') }}" class="btn btn-sm btn-info">
                                 Detail
@@ -171,7 +156,6 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
-
                     <div class="modal-body">
                         <table class="table table-sm table-hover align-middle">
                             <thead>
@@ -201,8 +185,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="modal fade" id="modalDokumenUnik" tabindex="-1" aria-labelledby="modalDokumenUnikLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
@@ -218,7 +200,6 @@
                                 aria-label="Close"></button>
                         </div>
                     </div>
-
                     <div class="modal-body">
                         <table class="table table-sm table-hover align-middle">
                             <thead>
@@ -248,8 +229,6 @@
                 </div>
             </div>
         </div>
-
-
         {{-- 📈 Statistik Akses Dokumen --}}
         <div class="row g-3 mt-3">
             <div class="col-12">
@@ -264,7 +243,6 @@
                 </div>
             </div>
         </div>
-
         {{-- 🗂 Status Dokumen + Chart --}}
         <div class="card rounded-3 shadow-sm mb-3 mt-3">
             <div class="card-body">
