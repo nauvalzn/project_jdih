@@ -7,7 +7,7 @@ $configData = Helper::appClasses();
 @extends('layouts/commonMaster')
 
 @php
-/* Display elements */
+/* Display elementsda */
 $contentNavbar = $contentNavbar ?? true;
 $containerNav = $containerNav ?? 'container-xxl';
 $isNavbar = $isNavbar ?? true;
