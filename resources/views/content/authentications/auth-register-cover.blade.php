@@ -6,7 +6,7 @@ $configData = Helper::appClasses();
 
 @extends('layouts/layoutMaster')
 
-@section('title', 'Register Cover - Pages')
+@section('title', 'Daftar Cover - Halaman')
 
 @section('vendor-style')
 @vite([
@@ -59,17 +59,17 @@ $configData = Helper::appClasses();
     <div
       class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg position-relative py-sm-12 px-12 py-6">
       <div class="w-px-400 mx-auto pt-12 pt-lg-0">
-        <h4 class="mb-1">Adventure starts here 🚀</h4>
-        <p class="mb-5">Make your app management easy and fun!</p>
+        <h4 class="mb-1">Buat Akun</h4>
+        <p class="mb-5">Buat akun dan nikmati kemudahan dalam mengelola aplikasi</p>
 
         <form id="formAuthentication" class="mb-5" action="{{url('/')}}" method="GET">
           <div class="form-floating form-floating-outline mb-5 form-control-validation">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username"
+            <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan nama pengguna"
               autofocus />
-            <label for="username">Username</label>
+            <label for="username">Nama Pengguna</label>
           </div>
           <div class="form-floating form-floating-outline mb-5 form-control-validation">
-            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email" />
+            <input type="text" class="form-control" id="email" name="email" placeholder="Masukkan email Anda" />
             <label for="email">Email</label>
           </div>
           <div class="mb-5 form-password-toggle form-control-validation">
@@ -78,7 +78,7 @@ $configData = Helper::appClasses();
                 <input type="password" id="password" class="form-control" name="password"
                   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                   aria-describedby="password" />
-                <label for="password">Password</label>
+                <label for="password">Kata Sandi</label>
               </div>
               <span class="input-group-text cursor-pointer"><i class="icon-base ri ri-eye-off-line"></i></span>
             </div>
@@ -87,44 +87,24 @@ $configData = Helper::appClasses();
             <div class="form-check mt-2">
               <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
               <label class="form-check-label" for="terms-conditions">
-                I agree to
-                <a href="javascript:void(0);">privacy policy & terms</a>
+                Saya setuju dengan
+                <a href="javascript:void(0);">kebijakan privasi & syarat</a>
               </label>
             </div>
           </div>
-          <button class="btn btn-primary d-grid w-100">Sign up</button>
+          <button class="btn btn-primary d-grid w-100">Daftar</button>
         </form>
 
         <p class="text-center mb-5">
-          <span>Already have an account?</span>
+          <span>Sudah punya akun?</span>
           <a href="{{url('auth/login-cover')}}">
-            <span>Sign in instead</span>
+            <span>Masuk di sini</span>
           </a>
         </p>
 
-        <div class="divider my-5">
-          <div class="divider-text">or</div>
-        </div>
+     
 
-        <div class="d-flex justify-content-center gap-2">
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-facebook">
-            <i class="icon-base ri ri-facebook-fill icon-18px"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-twitter">
-            <i class="icon-base ri ri-twitter-fill icon-18px"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-github">
-            <i class="icon-base ri ri-github-fill icon-18px"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-google-plus">
-            <i class="icon-base ri ri-google-fill icon-18px"></i>
-          </a>
-        </div>
-      </div>
-    </div>
+    
     <!-- /Register -->
   </div>
 </div>

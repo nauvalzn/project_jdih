@@ -113,37 +113,39 @@ class UserManagement extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request)
-  {
+public function store(Request $request)
+{
     $userID = $request->id;
 
-    if ($userID) {
-      // update the value
-      $users = User::updateOrCreate(
-        ['id' => $userID],
-        ['name' => $request->name, 'email' => $request->email]
-      );
+    // Cek email unik untuk create & update
+    $userEmail = User::where('email', $request->email)
+        ->when($userID, function ($query) use ($userID) {
+            $query->where('id', '!=', $userID);
+        })
+        ->first();
 
-      // user updated
-      return response()->json('Updated');
-    } else {
-      // create new one if email is unique
-      $userEmail = User::where('email', $request->email)->first();
-
-      if (empty($userEmail)) {
-        $users = User::updateOrCreate(
-          ['id' => $userID],
-          ['name' => $request->name, 'email' => $request->email, 'password' => bcrypt(Str::random(10))]
-        );
-
-        // user created
-        return response()->json('Created');
-      } else {
-        // user already exist
-        return response()->json(['message' => "already exits"], 422);
-      }
+    if ($userEmail) {
+        return response()->json(['message' => "Email sudah digunakan"], 422);
     }
-  }
+
+    if ($userID) {
+        // update user
+        User::updateOrCreate(
+            ['id' => $userID],
+            ['name' => $request->name, 'email' => $request->email]
+        );
+        return response()->json('Updated');
+    } else {
+        // create user baru
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt(Str::random(10)),
+        ]);
+        return response()->json('Created');
+    }
+}
+
 
   /**
    * Display the specified resource.

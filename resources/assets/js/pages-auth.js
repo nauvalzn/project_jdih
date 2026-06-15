@@ -7,72 +7,72 @@ document.addEventListener('DOMContentLoaded', function () {
   (() => {
     const formAuthentication = document.querySelector('#formAuthentication');
 
-    // Form validation for Add new record
+    // Form validation untuk login / register
     if (formAuthentication && typeof FormValidation !== 'undefined') {
       FormValidation.formValidation(formAuthentication, {
         fields: {
           username: {
             validators: {
               notEmpty: {
-                message: 'Please enter username'
+                message: 'Silakan masukkan nama pengguna'
               },
               stringLength: {
                 min: 6,
-                message: 'Username must be more than 6 characters'
+                message: 'Nama pengguna minimal 6 karakter'
               }
             }
           },
           email: {
             validators: {
               notEmpty: {
-                message: 'Please enter your email'
+                message: 'Silakan masukkan email Anda'
               },
               emailAddress: {
-                message: 'Please enter a valid email address'
+                message: 'Silakan masukkan alamat email yang valid'
               }
             }
           },
           'email-username': {
             validators: {
               notEmpty: {
-                message: 'Please enter email / username'
+                message: 'Silakan masukkan email atau nama pengguna'
               },
               stringLength: {
                 min: 6,
-                message: 'Username must be more than 6 characters'
+                message: 'Nama pengguna minimal 6 karakter'
               }
             }
           },
           password: {
             validators: {
               notEmpty: {
-                message: 'Please enter your password'
+                message: 'Silakan masukkan kata sandi'
               },
               stringLength: {
                 min: 6,
-                message: 'Password must be more than 6 characters'
+                message: 'Kata sandi minimal 6 karakter'
               }
             }
           },
           'confirm-password': {
             validators: {
               notEmpty: {
-                message: 'Please confirm password'
+                message: 'Silakan konfirmasi kata sandi'
               },
               identical: {
                 compare: () => formAuthentication.querySelector('[name="password"]').value,
-                message: 'The password and its confirmation do not match'
+                message: 'Konfirmasi kata sandi tidak cocok'
               },
               stringLength: {
                 min: 6,
-                message: 'Password must be more than 6 characters'
+                message: 'Kata sandi minimal 6 karakter'
               }
             }
           },
           terms: {
             validators: {
               notEmpty: {
-                message: 'Please agree to terms & conditions'
+                message: 'Anda harus menyetujui syarat & ketentuan'
               }
             }
           }
@@ -97,11 +97,10 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Two Steps Verification for numeral input mask
+    // Two Steps Verification untuk input angka
     const numeralMaskElements = document.querySelectorAll('.numeral-mask');
 
-    // Format function for numeral mask
-    const formatNumeral = value => value.replace(/\D/g, ''); // Only keep digits
+    const formatNumeral = value => value.replace(/\D/g, ''); // hanya angka
 
     if (numeralMaskElements.length > 0) {
       numeralMaskElements.forEach(numeralMaskEl => {

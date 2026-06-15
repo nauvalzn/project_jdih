@@ -137,6 +137,11 @@
               aria-label="John Doe" />
             <label for="add-user-fullname">Full Name</label>
           </div>
+           <div class="form-floating form-floating-outline mb-5 form-control-validation">
+            <input type="password" class="form-control" id="add-user-password" placeholder="John Doe" name="password"
+              aria-label="John Doe" />
+            <label for="add-user-password">Password</label>
+          </div>
           <div class="form-floating form-floating-outline mb-5 form-control-validation">
             <input type="text" id="add-user-email" class="form-control" placeholder="john.doe@example.com"
               aria-label="john.doe@example.com" name="email" />
@@ -183,7 +188,7 @@
             <label for="country">Country</label>
           </div>
           <div class="form-floating form-floating-outline mb-5">
-            <select id="user-role" class="form-select">
+            <select id="user-role" class="form-select" name="">
               <option value="subscriber">Subscriber</option>
               <option value="editor">Editor</option>
               <option value="maintainer">Maintainer</option>

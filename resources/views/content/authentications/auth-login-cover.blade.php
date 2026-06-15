@@ -60,14 +60,14 @@ $configData = Helper::appClasses();
     <div
       class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg position-relative py-sm-12 px-12 py-6">
       <div class="w-px-400 mx-auto pt-12 pt-lg-0">
-        <h4 class="mb-1">Welcome to {{config('variables.templateName')}}! 👋</h4>
-        <p class="mb-5">Please sign-in to your account and start the adventure</p>
+        <h4 class="mb-1">Selamat Datang {{config('variables.templateName')}}! 👋</h4>
+        <p class="mb-5">Silahkan masuk ke akun anda</p>
 
         <form id="formAuthentication" class="mb-5" action="{{url('/')}}" method="GET">
           <div class="form-floating form-floating-outline mb-5 form-control-validation">
             <input type="text" class="form-control" id="email" name="email-username"
-              placeholder="Enter your email or username" autofocus />
-            <label for="email">Email or Username</label>
+              placeholder="Masukkan email atau nama pengguna Anda" autofocus />
+            <label for="email">Email atau Nama Pengguna</label>
           </div>
           <div class="mb-5">
             <div class="form-password-toggle form-control-validation">
@@ -76,7 +76,7 @@ $configData = Helper::appClasses();
                   <input type="password" id="password" class="form-control" name="password"
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                     aria-describedby="password" />
-                  <label for="password">Password</label>
+                  <label for="password">Kata Sandi</label>
                 </div>
                 <span class="input-group-text cursor-pointer"><i
                     class="icon-base ri ri-eye-off-line icon-20px"></i></span>
@@ -86,45 +86,25 @@ $configData = Helper::appClasses();
           <div class="mb-5 d-flex justify-content-between mt-5">
             <div class="form-check mt-2">
               <input class="form-check-input" type="checkbox" id="remember-me" />
-              <label class="form-check-label" for="remember-me"> Remember Me </label>
+              <label class="form-check-label" for="remember-me"> Ingat Saya </label>
             </div>
             <a href="{{url('auth/forgot-password-cover')}}" class="float-end mb-1 mt-2">
-              <span>Forgot Password?</span>
+              <span>Lupa Password</span>
             </a>
           </div>
-          <button class="btn btn-primary d-grid w-100">Sign in</button>
+          <button class="btn btn-primary d-grid w-100">Masuk</button>
         </form>
 
         <p class="text-center">
-          <span>New on our platform?</span>
+          <span>Baru di platform kami?</span>
           <a href="{{url('auth/register-cover')}}">
-            <span>Create an account</span>
+            <span>Buat Akun</span>
           </a>
         </p>
 
-        <div class="divider my-5">
-          <div class="divider-text">or</div>
-        </div>
+    
 
-        <div class="d-flex justify-content-center gap-2">
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-facebook">
-            <i class="icon-base ri  ri-facebook-fill icon-18px"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-twitter">
-            <i class="icon-base ri  ri-twitter-fill icon-18px"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-github">
-            <i class="icon-base ri  ri-github-fill icon-18px"></i>
-          </a>
-
-          <a href="javascript:;" class="btn btn-icon rounded-circle btn-text-google-plus">
-            <i class="icon-base ri  ri-google-fill icon-18px"></i>
-          </a>
-        </div>
-      </div>
-    </div>
+       
     <!-- /Login -->
   </div>
 </div>
