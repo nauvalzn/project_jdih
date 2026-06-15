@@ -33,7 +33,7 @@
           <div class="app-brand justify-content-center mt-5">
             <a href="{{ url('/') }}" class="app-brand-link gap-2">
               <span class="app-brand-logo demo">@include('_partials.macros')</span>
-              <span class="app-brand-text demo text-heading fw-semibold">{{ config('variables.templateName') }}</span>
+              {{-- <span class="app-brand-text demo text-heading fw-semibold">{{ config('variables.templateName') }}</span> --}}
             </a>
           </div>
           <!-- /Logo -->

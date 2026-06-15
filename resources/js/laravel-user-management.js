@@ -61,9 +61,11 @@ document.addEventListener('DOMContentLoaded', function (e) {
         // columns according to JSON
         { data: 'id' },
         { data: 'id' },
+        { data: 'nip'},
         { data: 'name' },
         { data: 'email' },
         { data: 'email_verified_at' },
+        { data: 'role' },
         { data: 'action' }
       ],
       columnDefs: [
@@ -86,9 +88,19 @@ document.addEventListener('DOMContentLoaded', function (e) {
             return `<span>${full.fake_id}</span>`;
           }
         },
+
+        {
+  // Kolom NIP
+  targets: 2,
+  responsivePriority: 3,
+  render: function (data, type, full, meta) {
+    return `<span class="text-heading">${full.nip || '-'}</span>`;
+  }
+},
+
         {
           // User full name
-          targets: 2,
+          targets: 3,
           responsivePriority: 4,
           render: function (data, type, full, meta) {
             const { name } = full; // Destructuring to get 'name' from the 'full' object
@@ -127,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
         {
           // User email
-          targets: 3,
+          targets: 4,
           render: function (data, type, full, meta) {
             const email = full['email'];
 
@@ -136,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
         },
         {
           // email verify
-          targets: 4,
+          targets: 5,
           className: 'text-center',
           render: function (data, type, full, meta) {
             const verified = full['email_verified_at'];
@@ -148,27 +160,55 @@ document.addEventListener('DOMContentLoaded', function (e) {
           }
         },
         {
-          // Actions
-          targets: -1,
-          title: 'Actions',
-          searchable: false,
-          orderable: false,
-          render: function (data, type, full, meta) {
-            return (
-              '<div class="d-flex align-items-center gap-4">' +
-              `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser"><i class="icon-base ri ri-edit-box-line icon-22px"></i></button>` +
-              `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill delete-record" data-id="${full['id']}"><i class="icon-base ri ri-delete-bin-7-line icon-22px"></i></button>` +
-              '<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ri ri-more-2-line icon-22px"></i></button>' +
-              '<div class="dropdown-menu dropdown-menu-end m-0">' +
-              '<a href="' +
-              userView +
-              '" class="dropdown-item">View</a>' +
-              '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
-              '</div>' +
-              '</div>'
-            );
-          }
-        }
+  targets: 6, // posisi kolom role
+  className: 'text-center',
+  label: 'Role',
+  render: function (data, type, full, meta) {
+  var role = full['role'] || 'operator'; // fallback kalau null
+  var roleBadgeObj = {
+    operator: '<i class="icon-base ri ri-user-settings-line icon-22px text-info me-2"></i>',
+    admin: '<i class="icon-base ri ri-shield-user-line icon-22px text-danger me-2"></i>'
+  };
+  return (
+    "<span class='text-truncate d-flex align-items-center text-heading'>" +
+    (roleBadgeObj[role] || '') +
+    role.charAt(0).toUpperCase() + role.slice(1) +
+    '</span>'
+  );
+}
+
+},
+
+        {
+  // Actions
+  targets: -1,
+  title: 'Actions',
+  searchable: false,
+  orderable: false,
+  className: 'text-center', // <-- Tambah class ini untuk center horizontal
+  render: function (data, type, full, meta) {
+    return (
+      '<div class="d-flex justify-content-center align-items-center gap-2">' +
+        `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill edit-record" data-id="${full['id']}" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
+          <i class="icon-base ri ri-edit-box-line icon-22px"></i>
+        </button>` +
+        `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill delete-record" data-id="${full['id']}">
+          <i class="icon-base ri ri-delete-bin-7-line icon-22px"></i>
+        </button>` +
+        '<div class="dropdown">' +
+          `<button class="btn btn-icon btn-text-secondary btn-sm rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+            <i class="icon-base ri ri-more-2-line icon-22px"></i>
+          </button>` +
+          '<div class="dropdown-menu dropdown-menu-end m-0">' +
+            `<a href="${userView}" class="dropdown-item">View</a>` +
+            '<a href="javascript:;" class="dropdown-item">Suspend</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+}
+
       ],
       order: [[2, 'desc']],
       layout: {
@@ -573,6 +613,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           .then(response => response.json())
           .then(data => {
             document.getElementById('user_id').value = data.id;
+            document.getElementById('add-user-nip').value = data.nip;
             document.getElementById('add-user-fullname').value = data.name;
             document.getElementById('add-user-email').value = data.email;
           });
@@ -719,8 +760,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
           // sweetalert
           Swal.fire({
             icon: 'success',
-            title: `Successfully ${status}!`,
-            text: `User ${status} Successfully.`,
+            title: `Berhasil!`,
+            text: `Data user telah disimpan.`,
             customClass: {
               confirmButton: 'btn btn-success'
             }

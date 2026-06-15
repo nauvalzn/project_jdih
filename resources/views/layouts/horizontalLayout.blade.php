@@ -36,7 +36,7 @@ $containerNav = $configData['contentLayout'] === 'compact' ? 'container-xxl' : '
 
         <!-- BEGIN: Navbar-->
         @if ($isNavbar)
-        @include('layouts/sections/navbar/navbar')
+        @include('layouts.sections.navbar.navbar')
         @endif
         <!-- END: Navbar-->
 
@@ -51,7 +51,7 @@ $containerNav = $configData['contentLayout'] === 'compact' ? 'container-xxl' : '
             <div class="content-wrapper">
 
                 @if ($isMenu)
-                @include('layouts/sections/menu/horizontalMenu')
+                @include('layouts.sections.menu.horizontalMenu')
                 @endif
 
                 <!-- Content -->

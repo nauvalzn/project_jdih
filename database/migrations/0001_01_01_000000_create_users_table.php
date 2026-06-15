@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            
+            $table->string('kontak', 20)->nullable(); // sudah ada
+            $table->string('alamat')->nullable();     // tambah alamat
+            $table->string('avatar')->nullable();     // tambah foto/avatar
+            
             $table->string('password');
+            $table->enum('role', ['admin', 'operator']);
             $table->rememberToken();
             $table->timestamps();
         });

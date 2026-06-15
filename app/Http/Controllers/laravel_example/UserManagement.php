@@ -42,9 +42,11 @@ class UserManagement extends Controller
   {
     $columns = [
       1 => 'id',
-      2 => 'name',
-      3 => 'email',
-      4 => 'email_verified_at',
+      2 => 'nip',
+      3 => 'name',
+      4 => 'email',
+      5 => 'email_verified_at',
+      6 => 'role',
     ];
 
     $totalData = User::count(); // Total records without filtering
@@ -82,9 +84,11 @@ class UserManagement extends Controller
       $data[] = [
         'id' => $user->id,
         'fake_id' => ++$ids,
+        'nip' => $user->nip,
         'name' => $user->name,
         'email' => $user->email,
         'email_verified_at' => $user->email_verified_at,
+        'role' => $user->role,
       ];
     }
 
@@ -113,6 +117,7 @@ class UserManagement extends Controller
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
+<<<<<<< HEAD
 public function store(Request $request)
 {
     $userID = $request->id;
@@ -144,6 +149,51 @@ public function store(Request $request)
         ]);
         return response()->json('Created');
     }
+=======
+  public function store(Request $request)
+{
+    $userID = $request->id;
+
+    if ($userID) {
+        // Update user
+        $user = User::findOrFail($userID);
+
+        $user->update([
+            'nip' => $request->nip,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'role' => $request->role ?? 'operator',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Updated'
+        ]);
+    } else {
+        // Validate new user
+        $request->validate([
+            'nip' => 'required|string|max:20|unique:users,nip' . ($userID ? ",$userID" : ''),
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email' . ($userID ? ",$userID" : ''),
+            'password' => 'required|string|min:6',
+            'role' => 'sometimes|in:admin,operator',
+        ]);
+
+        User::create([
+            'nip' => $request->nip,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => $request->role ?? 'operator',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Created'
+        ]);
+    }
+>>>>>>> 9da10fc43eb40aca2e0bfe464962ea65581f6528
 }
 
 

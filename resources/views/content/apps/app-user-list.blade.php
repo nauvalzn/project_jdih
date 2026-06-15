@@ -25,6 +25,9 @@
 @endsection
 
 @section('page-script')
+<script>
+    var userListUrl = "{{ route('user-list.data') }}";
+</script>
 @vite('resources/assets/js/app-user-list.js')
 @endsection
 

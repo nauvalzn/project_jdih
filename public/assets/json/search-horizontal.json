@@ -4,7 +4,7 @@
       {
         "name": "Dashboard Analytics",
         "icon": "ri-bar-chart-line",
-        "url": ""
+        "url": "dashboard/analytics"
       },
       {
         "name": "Dashboard CRM",

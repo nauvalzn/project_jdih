@@ -1,856 +1,487 @@
 @php
-$configData = Helper::appClasses();
+    $configData = Helper::appClasses();
+    use Illuminate\Support\Facades\Auth;
 @endphp
-@extends('layouts/layoutMaster')
 
-@section('title', 'Dashboard - Analytics')
+@extends('layouts.layoutMaster')
+
+@section('title', 'Dashboard Analisis Dokumen')
+
 @section('vendor-style')
-@vite(['resources/assets/vendor/libs/apex-charts/apex-charts.scss', 'resources/assets/vendor/libs/swiper/swiper.scss'])
+    @vite(['resources/assets/vendor/libs/apex-charts/apex-charts.scss', 'resources/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.scss', 'resources/assets/vendor/libs/swiper/swiper.scss'])
 @endsection
 
 @section('page-style')
-@vite(['resources/assets/vendor/scss/pages/cards-statistics.scss'])
+    @vite(['resources/assets/vendor/scss/pages/cards-statistics.scss'])
 @endsection
 
 @section('vendor-script')
-@vite(['resources/assets/vendor/libs/apex-charts/apexcharts.js', 'resources/assets/vendor/libs/swiper/swiper.js'])
+    @vite(['resources/assets/vendor/libs/apex-charts/apexcharts.js', 'resources/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js', 'resources/assets/vendor/libs/swiper/swiper.js'])
 @endsection
 
 @section('page-script')
-@vite(['resources/assets/js/dashboards-analytics.js'])
+    @vite(['resources/assets/js/dashboards-analytics.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endsection
 
 @section('content')
-<div class="row g-6">
-  <!-- Gamification Card -->
-  <div class="col-md-12 col-xxl-8">
-    <div class="card">
-      <div class="d-flex align-items-end row">
-        <div class="col-md-6 order-2 order-md-1">
-          <div class="card-body">
-            <h4 class="card-title mb-4">Congratulations <span class="fw-bold">John!</span> 🎉</h4>
-            <p class="mb-0">You have done 68% 😎 more sales today.</p>
-            <p>Check your new badge in your profile.</p>
-            <a href="javascript:;" class="btn btn-primary">View Profile</a>
-          </div>
-        </div>
-        <div class="col-md-6 text-center text-md-end order-1 order-md-2">
-          <div class="card-body pb-0 px-0 pt-2">
-            <img src="{{asset('assets/img/illustrations/illustration-john-'.$configData['theme'].'.png')}}" height="186"
-              class="scaleX-n1-rtl" alt="View Profile" data-app-light-img="illustrations/illustration-john-light.png"
-              data-app-dark-img="illustrations/illustration-john-dark.png" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--/ Gamification Card -->
 
-  <!-- Statistics Total Order -->
-  <div class="col-xxl-2 col-sm-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-          <div class="avatar">
-            <div class="avatar-initial bg-label-primary rounded-3">
-              <i class="icon-base ri ri-shopping-cart-2-line icon-24px"></i>
-            </div>
-          </div>
-          <div class="d-flex align-items-center">
-            <p class="mb-0 text-success me-1">+22%</p>
-            <i class="icon-base ri ri-arrow-up-s-line text-success"></i>
-          </div>
-        </div>
-        <div class="card-info mt-5">
-          <h5 class="mb-1">155k</h5>
-          <p>Total Orders</p>
-          <div class="badge bg-label-secondary rounded-pill">Last 4 Month</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--/ Statistics Total Order -->
-
-  <!-- Sessions line chart -->
-  <div class="col-xxl-2 col-sm-6">
-    <div class="card h-100">
-      <div class="card-header pb-0">
-        <div class="d-flex align-items-center mb-1 flex-wrap">
-          <h5 class="mb-0 me-1">$38.5k</h5>
-          <p class="mb-0 text-success">+62%</p>
-        </div>
-        <span class="d-block card-subtitle">Sessions</span>
-      </div>
-      <div class="card-body">
-        <div id="sessions"></div>
-      </div>
-    </div>
-  </div>
-  <!--/ Sessions line chart -->
-
-  <!-- Total Transactions & Report Chart -->
-  <div class="col-12 col-xxl-8">
-    <div class="card h-100">
-      <div class="row row-bordered g-0 h-100">
-        <div class="col-md-7 col-12 order-2 order-md-0">
-          <div class="card-header">
-            <h5 class="mb-0">Total Transactions</h5>
-          </div>
-          <div class="card-body">
-            <div id="totalTransactionChart"></div>
-          </div>
-        </div>
-        <div class="col-md-5 col-12">
-          <div class="card-header">
-            <div class="d-flex justify-content-between">
-              <h5 class="mb-1">Report</h5>
-              <div class="dropdown">
-                <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-                  id="totalTransaction" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="icon-base ri ri-more-2-line"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalTransaction">
-                  <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                  <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                  <a class="dropdown-item" href="javascript:void(0);">Update</a>
-                </div>
-              </div>
-            </div>
-            <p class="mb-0 card-subtitle">Last month transactions $234.40k</p>
-          </div>
-          <div class="card-body pt-6">
-            <div class="row">
-              <div class="col-6 border-end">
-                <div class="d-flex flex-column align-items-center">
-                  <div class="avatar">
-                    <div class="avatar-initial bg-label-success rounded-3">
-                      <div class="icon-base ri ri-pie-chart-2-line icon-24px"></div>
+    {{-- 👋 Header Greeting --}}
+    <div class="row g-6">
+        <div class="col-12">
+            <div class="card w-100">
+                <div class="d-flex align-items-end row">
+                    <div class="col-md-6 order-2 order-md-1">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">
+                                Haii <span class="fw-bold">{{ auth()->user()->name }}</span>
+                                <span style="font-family:Roboto; font-weight:lighter;">[{{ Auth::user()->role }}]</span>
+                            </h4>
+                            <p class="mb-2">Selamat datang kembali di dashboard <i>Management!</i></p>
+                            <a href="{{ route('pages-account-settings-account') }}" class="btn btn-primary">Lihat Profil</a>
+                        </div>
                     </div>
-                  </div>
-                  <p class="mt-3 mb-1">This Week</p>
-                  <h6 class="mb-0">+82.45%</h6>
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="d-flex flex-column align-items-center">
-                  <div class="avatar">
-                    <div class="avatar-initial bg-label-primary rounded-3">
-                      <div class="icon-base ri ri-money-dollar-circle-line icon-24px"></div>
+                    <div class="col-md-6 text-center text-md-end order-1 order-md-2">
+                        <div class="card-body pb-0 px-0 pt-2">
+                            <img src="{{ asset('assets/img/illustrations/illustration-john-' . $configData['theme'] . '.png') }}"
+                                height="186" alt="View Profile"
+                                data-app-light-img="illustrations/John-Gaya-removebg-preview.png"
+                                data-app-dark-img="illustrations/John-Programmer-removebg-preview.png" />
+                        </div>
                     </div>
-                  </div>
-                  <p class="mt-3 mb-1">This Week</p>
-                  <h6 class="mb-0">-24.86%</h6>
                 </div>
-              </div>
             </div>
-            <hr class="my-5" />
-            <div class="d-flex justify-content-around align-items-center flex-wrap gap-2">
-              <div>
-                <p class="mb-1">Performance</p>
-                <h6 class="mb-0">+94.15%</h6>
-              </div>
-              <div>
-                <button class="btn btn-primary" type="button">view report</button>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!--/ Total Transactions & Report Chart -->
 
-  <!-- Performance Chart -->
-  <div class="col-12 col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <h5 class="mb-1">Performance</h5>
-          <div class="dropdown">
-            <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-              id="performanceDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-base ri ri-more-2-line"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="performanceDropdown">
-              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+    @if (auth()->user()->role !== 'operator')
+        {{-- 📅 Filter Periode --}}
+        <div class="card shadow-sm border-0 mb-4 mt-4">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0 text-primary">Pilih Periode</h5>
             </div>
-          </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="filter-month" class="form-label">Pilih Bulan</label>
+                        <select id="filter-month" class="form-select">
+                            @for ($i = 1; $i <= 12; $i++)
+                                <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}"
+                                    {{ $month == $i ? 'selected' : '' }}>
+                                    {{ DateTime::createFromFormat('!m', $i)->format('F') }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filter-year" class="form-label">Pilih Tahun</label>
+                        <select id="filter-year" class="form-select">
+                            @for ($i = date('Y'); $i >= 2000; $i--)
+                                <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}
+                                </option>
+                            @endfor
+                        </select>
+                    </div>
+                    <div class="col-md-3 align-self-end">
+                        <button id="apply-filter" class="btn btn-primary">Terapkan</button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="card-body">
-        <div id="performanceChart"></div>
-      </div>
-    </div>
-  </div>
-  <!--/ Performance Chart -->
 
-  <!-- Project Statistics -->
-  <div class="col-md-6 col-xxl-4">
-    <div class="card h-100">
-      <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="card-title m-0 me-2">Project Statistics</h5>
-        <div class="dropdown">
-          <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-            id="projectStatus" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="icon-base ri ri-more-2-line"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="projectStatus">
-            <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-            <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between p-4 border-bottom">
-        <p class="mb-0 fs-xsmall">NAME</p>
-        <p class="mb-0 fs-xsmall">BUDGET</p>
-      </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-          <li class="d-flex align-items-center mb-6">
-            <div class="avatar avatar-md flex-shrink-0 me-4">
-              <div class="avatar-initial bg-lightest rounded-3">
-                <div>
-                  <img src="{{asset('assets/img/icons/misc/3d-illustration.png')}}" alt="User" class="h-25" />
+        {{-- 📊 Top Small Cards --}}
+        <div class="row g-3 mt-2">
+            {{-- Total Akses --}}
+            <div class="col-md-3 col-6">
+                <div class="card p-2 rounded-3 shadow-sm" style="background-color: #f6f3ff; min-height: auto;">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-bar-chart-line-fill fs-3 text-primary"></i>
+                        <div class="ms-2">
+                            <p class="mb-1 small text-muted">Total Akses</p>
+                            <h5 class="mb-0 fw-bold">{{ $totalVisits }}</h5>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-                <h6 class="mb-1">3D Illustration</h6>
-                <small>Blender Illustration</small>
-              </div>
-              <div class="badge bg-label-primary rounded-pill">$6,500</div>
-            </div>
-          </li>
-          <li class="d-flex align-items-center mb-6">
-            <div class="avatar avatar-md flex-shrink-0 me-4">
-              <div class="avatar-initial bg-lightest rounded-3">
-                <div>
-                  <img src="{{asset('assets/img/icons/misc/finance-app-design.png')}}" alt="User" class="h-25" />
-                </div>
-              </div>
-            </div>
-            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-                <h6 class="mb-1">Finance App Design</h6>
-                <small>Figma UI Kit</small>
-              </div>
-              <div class="badge bg-label-primary rounded-pill">$4,290</div>
-            </div>
-          </li>
-          <li class="d-flex align-items-center mb-6">
-            <div class="avatar avatar-md flex-shrink-0 me-4">
-              <div class="avatar-initial bg-lightest rounded-3">
-                <div>
-                  <img src="{{asset('assets/img/icons/misc/4-square.png')}}" alt="User" class="h-25" />
-                </div>
-              </div>
-            </div>
-            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-                <h6 class="mb-1">4 Square</h6>
-                <small>Android Application</small>
-              </div>
-              <div class="badge bg-label-primary rounded-pill">$44,500</div>
-            </div>
-          </li>
-          <li class="d-flex align-items-center mb-6">
-            <div class="avatar avatar-md flex-shrink-0 me-4">
-              <div class="avatar-initial bg-lightest rounded-3">
-                <div>
-                  <img src="{{asset('assets/img/icons/misc/delta-web-app.png')}}" alt="User" class="h-25" />
-                </div>
-              </div>
-            </div>
-            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-                <h6 class="mb-1">Delta Web App</h6>
-                <small>React Dashboard</small>
-              </div>
-              <div class="badge bg-label-primary rounded-pill">$12,690</div>
-            </div>
-          </li>
-          <li class="d-flex align-items-center">
-            <div class="avatar avatar-md flex-shrink-0 me-4">
-              <div class="avatar-initial bg-lightest rounded-3">
-                <div>
-                  <img src="{{asset('assets/img/icons/misc/ecommerce-website.png')}}" alt="User" class="h-25" />
-                </div>
-              </div>
-            </div>
-            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-                <h6 class="mb-1">eCommerce Website</h6>
-                <small>Vue + Laravel</small>
-              </div>
-              <div class="badge bg-label-primary rounded-pill">$10,850</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!--/ Project Statistics -->
 
-  <!-- Multiple widgets -->
-  <div class="col-md-6 col-xxl-4">
-    <div class="row g-4">
-      <!-- Total Revenue chart -->
-      <div class="col-md-6 col-sm-6">
-        <div class="card h-100">
-          <div class="card-header pb-xl-8">
-            <div class="d-flex align-items-center mb-1 flex-wrap">
-              <h5 class="mb-0 me-1">$42.5k</h5>
-              <p class="mb-0 text-danger">-22%</p>
-            </div>
-            <span class="d-block card-subtitle">Total Revenue</span>
-          </div>
-          <div class="card-body">
-            <div id="totalRevenue"></div>
-          </div>
-        </div>
-      </div>
-      <!--/ Total Revenue chart -->
-
-      <div class="col-md-6 col-sm-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div class="avatar">
-                <div class="avatar-initial bg-label-success rounded-3">
-                  <i class="icon-base ri ri-handbag-line icon-24px"></i>
+            {{-- Dokumen Unik --}}
+            <div class="col-md-3 col-6">
+                <div class="card p-2 rounded-3 shadow-sm" style="background-color: #fff9ea; min-height: auto;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-file-earmark-text fs-3 text-warning"></i>
+                            <div class="ms-2">
+                                <p class="mb-1 small text-muted">Dokumen Unik</p>
+                                <h5 class="mb-0 fw-bold">{{ $uniqueDocuments }}</h5>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-warning px-3 py-1" data-bs-toggle="modal"
+                            data-bs-target="#modalDokumenUnik">
+                            Lihat
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="d-flex align-items-center">
-                <p class="mb-0 text-success me-1">+38%</p>
-                <i class="icon-base ri ri-arrow-up-s-line text-success"></i>
-              </div>
             </div>
-            <div class="card-info mt-5 mt-xl-8">
-              <h5 class="mb-1">$13.4k</h5>
-              <p>Total Sales</p>
-              <div class="badge bg-label-secondary rounded-pill">Last Six Month</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="col-md-6 col-sm-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div class="avatar">
-                <div class="avatar-initial bg-label-info rounded-3">
-                  <i class="icon-base ri ri-links-line icon-24px"></i>
+            {{-- Pengguna Unik --}}
+            <div class="col-md-3 col-6">
+                <div class="card p-2 rounded-3 shadow-sm" style="background-color: #f0fff6; min-height: auto;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person-fill fs-3 text-success"></i>
+                            <div class="ms-2">
+                                <p class="mb-1 small text-muted">Pengguna Unik</p>
+                                <h5 class="mb-0 fw-bold">{{ $uniqueUsers }}</h5>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-success px-3 py-1" data-bs-toggle="modal"
+                            data-bs-target="#modalUserUnik">
+                            Lihat
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="d-flex align-items-center">
-                <p class="mb-0 text-success me-1">+62%</p>
-                <i class="icon-base ri ri-arrow-up-s-line text-success"></i>
-              </div>
             </div>
-            <div class="card-info mt-5 mt-xl-8">
-              <h5 class="mb-1">142.8k</h5>
-              <p>Total Impression</p>
-              <div class="badge bg-label-secondary rounded-pill">Last One Year</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- overview Radial chart -->
-      <div class="col-md-6 col-sm-6">
-        <div class="card h-100">
-          <div class="card-header pb-xl-7">
-            <div class="d-flex align-items-center mb-1 flex-wrap">
-              <h5 class="mb-0 me-1">$67.1k</h5>
-              <p class="mb-0 text-success">+49%</p>
-            </div>
-            <span class="d-block card-subtitle">Overview</span>
-          </div>
-          <div class="card-body pb-xl-8">
-            <div id="overviewChart" class="d-flex align-items-center"></div>
-          </div>
-        </div>
-      </div>
-      <!--/ overview Radial chart -->
-    </div>
-  </div>
-  <!--/ Multiple widgets -->
 
-  <!-- Sales Country Chart -->
-  <div class="col-12 col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <h5 class="mb-1">Sales Country</h5>
-          <div class="dropdown">
-            <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-              id="salesCountryDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-base ri ri-more-2-line"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="salesCountryDropdown">
-              <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-              <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-            </div>
-          </div>
-        </div>
-        <p class="mb-0 card-subtitle">Total $42,580 Sales</p>
-      </div>
-      <div class="card-body pb-1 px-0">
-        <div id="salesCountryChart"></div>
-      </div>
-    </div>
-  </div>
-  <!--/ Sales Country Chart -->
-
-  <!-- Top Referral Source  -->
-  <div class="col-12 col-xxl-8">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div>
-          <h5 class="card-title mb-1">Top Referral Sources</h5>
-          <p class="card-subtitle mb-0">Number of Sales</p>
-        </div>
-        <div class="dropdown">
-          <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-            id="earningReportsTabsId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="icon-base ri ri-more-2-line"></i>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="earningReportsTabsId">
-            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-          </div>
-        </div>
-      </div>
-      <div class="card-body pb-0">
-        <ul class="nav nav-tabs nav-tabs-widget pb-6 gap-4 mx-1 d-flex flex-nowrap" role="tablist">
-          <li class="nav-item">
-            <a href="javascript:void(0);"
-              class="nav-link btn active d-flex flex-column align-items-center justify-content-center" role="tab"
-              data-bs-toggle="tab" data-bs-target="#navs-orders-id" aria-controls="navs-orders-id" aria-selected="true">
-              <div class="avatar avatar-sm">
-                <img src="{{asset('assets/img/icons/brands/google.png')}}" alt="User" />
-              </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);"
-              class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab"
-              data-bs-toggle="tab" data-bs-target="#navs-sales-id" aria-controls="navs-sales-id" aria-selected="false">
-              <div class="avatar avatar-sm">
-                <img src="{{asset('assets/img/icons/brands/facebook-rounded.png')}}" alt="User" />
-              </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);"
-              class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab"
-              data-bs-toggle="tab" data-bs-target="#navs-profit-id" aria-controls="navs-profit-id"
-              aria-selected="false">
-              <div class="avatar avatar-sm">
-                <img src="{{asset('assets/img/icons/brands/instagram-rounded.png')}}" alt="User" />
-              </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);"
-              class="nav-link btn d-flex flex-column align-items-center justify-content-center" role="tab"
-              data-bs-toggle="tab" data-bs-target="#navs-income-id" aria-controls="navs-income-id"
-              aria-selected="false">
-              <div class="avatar avatar-sm">
-                <img src="{{asset('assets/img/icons/brands/reddit-rounded.png')}}" alt="User" />
-              </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="javascript:void(0);" class="nav-link btn d-flex align-items-center justify-content-center disabled"
-              role="tab" data-bs-toggle="tab" aria-selected="false">
-              <div class="avatar avatar-sm">
-                <div class="avatar-initial bg-label-secondary text-body rounded">
-                  <i class="icon-base ri ri-add-line icon-22px"></i>
+            {{-- Rata-rata Akses --}}
+            <div class="col-md-3 col-6">
+                <div class="card p-2 rounded-3 shadow-sm" style="background-color: #eef9ff; min-height: auto;">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-graph-up-arrow fs-3 text-info"></i>
+                        <div class="ms-2">
+                            <p class="mb-1 small text-muted">Rata-rata Akses</p>
+                            <h5 class="mb-0 fw-bold">
+                                {{ $uniqueDocuments > 0 ? number_format($totalVisits / $uniqueDocuments, 2) : 0 }}
+                            </h5>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="tab-content p-0">
-        <div class="tab-pane fade show active" id="navs-orders-id" role="tabpanel">
-          <div class="table-responsive text-nowrap">
-            <table class="table border-top">
-              <thead>
-                <tr>
-                  <th class="bg-transparent border-bottom">Product Name</th>
-                  <th class="bg-transparent border-bottom">STATUS</th>
-                  <th class="text-end bg-transparent border-bottom">Profit</th>
-                  <th class="text-end bg-transparent border-bottom">REVENUE</th>
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-                <tr>
-                  <td>Email Marketing Campaign</td>
-                  <td>
-                    <div class="badge bg-label-primary rounded-pill">Active</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+24%</td>
-                  <td class="text-end fw-medium">$42,857</td>
-                </tr>
-                <tr>
-                  <td>Google Workspace</td>
-                  <td>
-                    <div class="badge bg-label-success rounded-pill">Completed</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-12%</td>
-                  <td class="text-end fw-medium">$850</td>
-                </tr>
-                <tr>
-                  <td>Affiliation Program</td>
-                  <td>
-                    <div class="badge bg-label-primary rounded-pill">Active</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+24%</td>
-                  <td class="text-end fw-medium">$5,576</td>
-                </tr>
-                <tr>
-                  <td>Google Adsense</td>
-                  <td>
-                    <div class="badge bg-label-info rounded-pill">In Draft</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+0%</td>
-                  <td class="text-end fw-medium">0</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            </div>
         </div>
-        <div class="tab-pane fade" id="navs-sales-id" role="tabpanel">
-          <div class="table-responsive text-nowrap">
-            <table class="table border-top">
-              <thead>
-                <tr>
-                  <th class="bg-transparent border-bottom">Product Name</th>
-                  <th class="bg-transparent border-bottom">STATUS</th>
-                  <th class="text-end bg-transparent border-bottom">Profit</th>
-                  <th class="text-end bg-transparent border-bottom">REVENUE</th>
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-                <tr>
-                  <td>facebook Adsense</td>
-                  <td>
-                    <div class="badge bg-label-info rounded-pill">In Draft</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+5%</td>
-                  <td class="text-end fw-medium">$5</td>
-                </tr>
-                <tr>
-                  <td>Affiliation Program</td>
-                  <td>
-                    <div class="badge bg-label-primary rounded-pill">Active</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-24%</td>
-                  <td class="text-end fw-medium">$5,576</td>
-                </tr>
-                <tr>
-                  <td>Email Marketing Campaign</td>
-                  <td>
-                    <div class="badge bg-label-warning rounded-pill">warning</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+5%</td>
-                  <td class="text-end fw-medium">$2,857</td>
-                </tr>
-                <tr>
-                  <td>facebook Workspace</td>
-                  <td>
-                    <div class="badge bg-label-success rounded-pill">Completed</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-12%</td>
-                  <td class="text-end fw-medium">$850</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="navs-profit-id" role="tabpanel">
-          <div class="table-responsive text-nowrap">
-            <table class="table border-top">
-              <thead>
-                <tr>
-                  <th class="bg-transparent border-bottom">Product Name</th>
-                  <th class="bg-transparent border-bottom">STATUS</th>
-                  <th class="text-end bg-transparent border-bottom">Profit</th>
-                  <th class="text-end bg-transparent border-bottom">REVENUE</th>
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-                <tr>
-                  <td>Affiliation Program</td>
-                  <td>
-                    <div class="badge bg-label-primary rounded-pill">Active</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-24%</td>
-                  <td class="text-end fw-medium">$5,576</td>
-                </tr>
-                <tr>
-                  <td>instagram Adsense</td>
-                  <td>
-                    <div class="badge bg-label-info rounded-pill">In Draft</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+5%</td>
-                  <td class="text-end fw-medium">$5</td>
-                </tr>
-                <tr>
-                  <td>instagram Workspace</td>
-                  <td>
-                    <div class="badge bg-label-success rounded-pill">Completed</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-12%</td>
-                  <td class="text-end fw-medium">$850</td>
-                </tr>
-                <tr>
-                  <td>Email Marketing Campaign</td>
-                  <td>
-                    <div class="badge bg-label-danger rounded-pill">warning</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-5%</td>
-                  <td class="text-end fw-medium">$857</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="tab-pane fade" id="navs-income-id" role="tabpanel">
-          <div class="table-responsive text-nowrap">
-            <table class="table border-top">
-              <thead>
-                <tr>
-                  <th class="bg-transparent border-bottom">Product Name</th>
-                  <th class="bg-transparent border-bottom">STATUS</th>
-                  <th class="text-end bg-transparent border-bottom">Profit</th>
-                  <th class="text-end bg-transparent border-bottom">REVENUE</th>
-                </tr>
-              </thead>
-              <tbody class="table-border-bottom-0">
-                <tr>
-                  <td>reddit Workspace</td>
-                  <td>
-                    <div class="badge bg-label-warning rounded-pill">process</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-12%</td>
-                  <td class="text-end fw-medium">$850</td>
-                </tr>
-                <tr>
-                  <td>Affiliation Program</td>
-                  <td>
-                    <div class="badge bg-label-primary rounded-pill">Active</div>
-                  </td>
-                  <td class="text-danger fw-medium text-end">-24%</td>
-                  <td class="text-end fw-medium">$5,576</td>
-                </tr>
-                <tr>
-                  <td>reddit Adsense</td>
-                  <td>
-                    <div class="badge bg-label-info rounded-pill">In Draft</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+5%</td>
-                  <td class="text-end fw-medium">$5</td>
-                </tr>
-                <tr>
-                  <td>Email Marketing Campaign</td>
-                  <td>
-                    <div class="badge bg-label-success rounded-pill">Completed</div>
-                  </td>
-                  <td class="text-success fw-medium text-end">+50%</td>
-                  <td class="text-end fw-medium">$857</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--/ Top Referral Source  -->
 
-  <!-- Weekly Sales Chart-->
-  <div class="col-12 col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <h5 class="mb-1">Weekly Sales</h5>
-          <div class="dropdown">
-            <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-              id="weeklySalesDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-base ri ri-more-2-line"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="weeklySalesDropdown">
-              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-              <a class="dropdown-item" href="javascript:void(0);">Update</a>
-              <a class="dropdown-item" href="javascript:void(0);">Share</a>
-            </div>
-          </div>
-        </div>
-        <p class="mb-0 card-subtitle">Total 85.4k Sales</p>
-      </div>
-      <div class="card-body">
-        <div class="row mb-7 mb-xl-12">
-          <div class="col-6 d-flex align-items-center">
-            <div class="avatar">
-              <div class="avatar-initial bg-label-primary rounded">
-                <i class="icon-base ri ri-funds-line icon-24px"></i>
-              </div>
-            </div>
-            <div class="ms-3 d-flex flex-column">
-              <p class="mb-0">Net Income</p>
-              <h6 class="mb-0">$438.5K</h6>
-            </div>
-          </div>
-          <div class="col-6 d-flex align-items-center">
-            <div class="avatar">
-              <div class="avatar-initial bg-label-warning rounded">
-                <i class="icon-base ri ri-money-dollar-circle-line icon-24px"></i>
-              </div>
-            </div>
-            <div class="ms-3 d-flex flex-column">
-              <p class="mb-0">Expense</p>
-              <h6 class="mb-0">$22.4K</h6>
-            </div>
-          </div>
-        </div>
-        <div id="weeklySalesChart"></div>
-      </div>
-    </div>
-  </div>
-  <!--/ Weekly Sales Chart-->
+        <div class="modal fade" id="modalUserUnik" tabindex="-1" aria-labelledby="modalUserUnikLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between align-items-center">
+                        <h5 class="modal-title" id="modalUserUnikLabel">Daftar Pengguna Unik</h5>
 
-  <!-- visits By Day Chart-->
-  <div class="col-12 col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <h5 class="mb-1">Visits by Day</h5>
-          <div class="dropdown">
-            <button class="btn btn-text-secondary rounded-pill text-body-secondary border-0 p-1" type="button"
-              id="visitsByDayDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="icon-base ri ri-more-2-line"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="visitsByDayDropdown">
-              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-              <a class="dropdown-item" href="javascript:void(0);">Update</a>
-              <a class="dropdown-item" href="javascript:void(0);">Share</a>
-            </div>
-          </div>
-        </div>
-        <p class="mb-0 card-subtitle">Total 248.5k Visits</p>
-      </div>
-      <div class="card-body pt-xl-5">
-        <div id="visitsByDayChart"></div>
-        <div class="d-flex justify-content-between mt-6">
-          <div>
-            <h6 class="mb-0">Most Visited Day</h6>
-            <p class="mb-0 small">Total 62.4k Visits on Thursday</p>
-          </div>
-          <div class="avatar">
-            <div class="avatar-initial bg-label-warning rounded">
-              <i class="icon-base ri ri-arrow-right-s-line icon-24px scaleX-n1-rtl"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--/ visits By Day Chart-->
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('dashboard.analytics.users') }}" class="btn btn-sm btn-info">
+                                Detail
+                            </a>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
 
-  <!-- Activity Timeline -->
-  <div class="col-12 col-xxl-8">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <h5 class="mb-0">Activity Timeline</h5>
-        </div>
-      </div>
-      <div class="card-body pt-4">
-        <ul class="timeline card-timeline mb-0">
-          <li class="timeline-item timeline-item-transparent">
-            <span class="timeline-point timeline-point-primary"></span>
-            <div class="timeline-event">
-              <div class="timeline-header mb-3">
-                <h6 class="mb-0">12 Invoices have been paid</h6>
-                <small class="text-body-secondary">12 min ago</small>
-              </div>
-              <p class="mb-2">Invoices have been paid to the company</p>
-              <div class="d-flex align-items-center mb-1">
-                <div class="badge bg-lighter rounded-3">
-                  <img src="{{asset('assets//img/icons/misc/pdf.png')}}" alt="img" width="20" class="me-2" />
-                  <span class="h6 mb-0">invoices.pdf</span>
+                    <div class="modal-body">
+                        <table class="table table-sm table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Alamat IP</th>
+                                    <th>User Agent</th>
+                                    <th>Total Kunjungan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($uniqueUserList as $i => $user)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td>{{ $user->ip }}</td>
+                                        <td class="text-truncate" style="max-width: 250px;">{{ $user->user_agent }}</td>
+                                        <td>{{ $user->total_visits }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Tidak ada data</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
             </div>
-          </li>
-          <li class="timeline-item timeline-item-transparent">
-            <span class="timeline-point timeline-point-success"></span>
-            <div class="timeline-event">
-              <div class="timeline-header mb-3">
-                <h6 class="mb-0">Client Meeting</h6>
-                <small class="text-body-secondary">45 min ago</small>
-              </div>
-              <p class="mb-2">Project meeting with john @10:15am</p>
-              <div class="d-flex justify-content-between flex-wrap gap-2">
-                <div class="d-flex flex-wrap align-items-center">
-                  <div class="avatar avatar-sm me-2">
-                    <img src="{{asset('assets/img/avatars/1.png')}}" alt="Avatar" class="rounded-circle" />
-                  </div>
-                  <div>
-                    <p class="mb-0 small fw-medium">Lester McCarthy (Client)</p>
-                    <small>CEO of ThemeSelection</small>
-                  </div>
+        </div>
+
+
+        <div class="modal fade" id="modalDokumenUnik" tabindex="-1" aria-labelledby="modalDokumenUnikLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header d-flex justify-content-between align-items-center">
+                        <h5 class="modal-title" id="modalDokumenUnikLabel">Daftar Dokumen Unik</h5>
+
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('dashboard.analytics.documents') }}" class="btn btn-sm btn-info">
+                                Detail
+                            </a>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                    </div>
+
+                    <div class="modal-body">
+                        <table class="table table-sm table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Jenis Dokumen</th>
+                                    <th>Total Kunjungan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($uniqueDocumentList as $i => $doc)
+                                    <tr>
+                                        <td>{{ $i + 1 }}</td>
+                                        <td class="text-truncate" style="max-width: 300px;">{{ $doc->judul }}</td>
+                                        <td>{{ $doc->jenis_dokumen }}</td>
+                                        <td>{{ $doc->total_visits }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Tidak ada data</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
             </div>
-          </li>
-          <li class="timeline-item timeline-item-transparent">
-            <span class="timeline-point timeline-point-info"></span>
-            <div class="timeline-event">
-              <div class="timeline-header mb-3">
-                <h6 class="mb-0">Create a new project for client</h6>
-                <small class="text-body-secondary">2 Day Ago</small>
-              </div>
-              <p class="mb-2">6 team members in a project</p>
-              <ul class="list-group list-group-flush">
-                <li
-                  class="list-group-item d-flex justify-content-between align-items-center flex-wrap border-top-0 p-0">
-                  <div class="d-flex flex-wrap align-items-center">
-                    <ul class="list-unstyled users-list d-flex align-items-center avatar-group m-0 me-2">
-                      <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                        title="Vinnie Mostowy" class="avatar pull-up">
-                        <img class="rounded-circle" src="{{asset('assets/img/avatars/5.png')}}" alt="Avatar" />
-                      </li>
-                      <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                        title="Allen Rieske" class="avatar pull-up">
-                        <img class="rounded-circle" src="{{asset('assets/img/avatars/12.png')}}" alt="Avatar" />
-                      </li>
-                      <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                        title="Julee Rossignol" class="avatar pull-up">
-                        <img class="rounded-circle" src="{{asset('assets/img/avatars/6.png')}}" alt="Avatar" />
-                      </li>
-                      <li class="avatar">
-                        <span class="avatar-initial rounded-circle pull-up text-heading" data-bs-toggle="tooltip"
-                          data-bs-placement="bottom" title="3 more">+3</span>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
+        </div>
+
+
+        {{-- 📈 Statistik Akses Dokumen --}}
+        <div class="row g-3 mt-3">
+            <div class="col-12">
+                <div class="card rounded-3 shadow-sm h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">Statistik Akses Dokumen</h5>
+                        <small>Total akses: {{ number_format($totalVisits) }}</small>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="shipmentStatisticsChart" height="350"></canvas>
+                    </div>
+                </div>
             </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!-- Activity Timeline -->
-</div>
+        </div>
+
+        {{-- 🗂 Status Dokumen + Chart --}}
+        <div class="card rounded-3 shadow-sm mb-3 mt-3">
+            <div class="card-body">
+                <h6 class="fw-bold mb-3">Status Dokumen</h6>
+                <div class="row">
+                    <div class="col-md-6 d-flex gap-3">
+                        @php
+                            $statusDokumen = [
+                                [
+                                    'label' => 'Terverifikasi',
+                                    'value' => $dokumenTerverifikasi,
+                                    'icon' => 'check-circle-fill',
+                                    'bg' => '#f0fff6',
+                                    'color' => 'success',
+                                ],
+                                [
+                                    'label' => 'Belum Verifikasi',
+                                    'value' => $dokumenBelumVerifikasi,
+                                    'icon' => 'x-circle-fill',
+                                    'bg' => '#fff4e6',
+                                    'color' => 'warning',
+                                ],
+                                [
+                                    'label' => 'Total Dokumen',
+                                    'value' => $totaldokumen,
+                                    'icon' => 'folder-fill',
+                                    'bg' => '#f9f0ff',
+                                    'color' => 'primary',
+                                ],
+                            ];
+                        @endphp
+                        @foreach ($statusDokumen as $status)
+                            <div class="card p-3 rounded-3 shadow-sm text-center flex-fill"
+                                style="background-color: {{ $status['bg'] }};">
+                                <div class="d-flex flex-column justify-content-center align-items-center text-center"
+                                    style="height: 100%;">
+                                    <i class="bi bi-{{ $status['icon'] }} fs-3 text-{{ $status['color'] }}"></i>
+                                    <p class="mb-1 small text-muted mt-2">{{ $status['label'] }}</p>
+                                    <h5 class="mb-0 fw-bold">{{ $status['value'] }}</h5>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="statusChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- 🍩 Donut Chart + Top Dokumen --}}
+        <div class="row g-3 mt-3">
+            <div class="col-lg-6 col-md-12">
+                <div class="card rounded-3 shadow-sm mb-3">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3">Jenis Kategori Dokumen yang Paling Sering Dilihat</h6>
+                        <canvas id="donutChartCenter" height="220"></canvas>
+                        <div class="mt-3 small text-muted">
+                            Legend: top jenis kategori dokumen akses berdasarkan jenis dokumen.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card rounded-3 shadow-sm h-100">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-2">(Top Dokumen)</h6>
+                        <p class="text-muted small mb-3">{{ $topDocuments->count() }} dokumen teratas</p>
+                        <div class="list-group list-group-flush">
+                            @foreach ($topDocuments->take(10) as $doc)
+                                <div class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="me-2">
+                                        <div class="small text-muted">{{ $doc->jenis_dokumen }}</div>
+                                        <div class="fw-semibold text-truncate">
+                                            {{ \Illuminate\Support\Str::words($doc->judul, 6, '...') }}</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold">{{ $doc->total_visits }}</div>
+                                        <small class="text-muted">visits</small>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- 🖥 Script Chart.js --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // ----------------- Data -----------------
+                const visitsLabels = @json($visitsLabels);
+                const visitsData = @json($visitsData);
+                const statusLabels = ['Tidak Berlaku', 'Berlaku', 'Berlaku Sebagian'];
+                const statusData = [{{ $dokumenTidakBerlaku }}, {{ $dokumenBerlaku }},
+                    {{ $dokumenBerlakuSebagian }}
+                ];
+                const donutLabels = @json($donutLabels);
+                const donutData = @json($donutData);
+
+                // ----------------- Shipment Chart -----------------
+                new Chart(document.getElementById('shipmentStatisticsChart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: visitsLabels,
+                        datasets: [{
+                                label: 'Jumlah Akses',
+                                data: visitsData,
+                                backgroundColor: 'rgba(114,102,246,0.6)',
+                                borderColor: '#7266f6',
+                                borderWidth: 1,
+                                borderRadius: 6,
+                                barPercentage: 0.4,
+                                categoryPercentage: 0.5,
+                                yAxisID: 'y'
+                            },
+                            {
+                                type: 'line',
+                                label: 'Akses per Hari',
+                                data: visitsData,
+                                borderColor: '#ffb020',
+                                backgroundColor: 'rgba(255,176,32,0.15)',
+                                borderWidth: 2,
+                                pointBackgroundColor: '#fff',
+                                pointBorderColor: '#ffb020',
+                                tension: 0.3,
+                                yAxisID: 'y'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+
+                // ----------------- Status Chart -----------------
+                new Chart(document.getElementById('statusChart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: statusLabels,
+                        datasets: [{
+                            label: '', // biar nggak muncul di tooltip legend
+                            data: statusData,
+                            backgroundColor: ['#f87171', '#34d399', '#facc15'],
+                            borderColor: ['#dc2626', '#059669', '#ca8a04'],
+                            borderWidth: 1.5,
+                            borderRadius: 10,
+                            barPercentage: 0.6,
+                            categoryPercentage: 0.7
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false // hide legend kotak merah
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return ctx.formattedValue; // cuma tampilkan angka, label kosong
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+                // ----------------- Donut Chart -----------------
+                new Chart(document.getElementById('donutChartCenter').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: donutLabels,
+                        datasets: [{
+                            data: donutData,
+                            backgroundColor: ['#7b3ff3', '#ffd666', '#52c41a', '#40a9ff', '#fa8c16',
+                                '#13c2c2'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    color: '#333'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // ----------------- Filter Bulan/Tahun -----------------
+                document.getElementById('apply-filter').addEventListener('click', function() {
+                    const month = document.getElementById('filter-month').value;
+                    const year = document.getElementById('filter-year').value;
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('month', month);
+                    url.searchParams.set('year', year);
+                    url.searchParams.set('filter', 'month');
+                    window.location.href = url;
+                });
+
+                // ----------------- Session Start URL -----------------
+                if (!sessionStorage.getItem('startUrl')) sessionStorage.setItem('startUrl', window.location.href);
+            });
+        </script>
+
+    @endif
+
 @endsection

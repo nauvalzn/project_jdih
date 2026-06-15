@@ -90,6 +90,7 @@ use App\Http\Controllers\authentications\ForgotPasswordBasic;
 use App\Http\Controllers\authentications\ForgotPasswordCover;
 use App\Http\Controllers\authentications\TwoStepsBasic;
 use App\Http\Controllers\authentications\TwoStepsCover;
+use App\Http\Controllers\authentications\AuthController;
 use App\Http\Controllers\wizard_example\Checkout as WizardCheckout;
 use App\Http\Controllers\wizard_example\PropertyListing;
 use App\Http\Controllers\wizard_example\CreateDeal;
@@ -156,10 +157,50 @@ use App\Http\Controllers\tables\DatatableExtensions;
 use App\Http\Controllers\charts\ApexCharts;
 use App\Http\Controllers\charts\ChartJs;
 use App\Http\Controllers\maps\Leaflet;
+use App\Http\Controllers\authentications\ForgotPasswordController;
+use App\Http\Controllers\authentications\ResetPasswordController;
+use Illuminate\Http\Request;
+use App\Models\Document;
+use App\Http\Controllers\StatusDokumenController;
+use App\Http\Controllers\DocumentController;
+use App\Models\DocumentAnalytics;
+use App\Http\Controllers\DocumentAnalyticsController;
+use App\Http\Middleware\AdminMiddleware;
+//select judul dokumen
+
+Route::get('/ajax/judul', [DocumentController::class, 'ajaxJudul'])->name('ajax.judul');
+Route::post('/dokumen/store', [DocumentController::class, 'store'])->name('dokumen.store');
+
+// use App\Http\Controllers\VerifikasiController;
+
+// Define a route for kategori dokumen
+
+Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
+Route::get('/keputusan-gubernur', [DocumentController::class, 'keputusanGubernur'])->name('keputusan-gubernur');
+Route::get('/peraturan-direktur', [DocumentController::class, 'peraturanDirektur'])->name('peraturan-direktur');
+Route::get('/keputusan-direktur', [DocumentController::class, 'keputusanDirektur'])->name('keputusan-direktur');
+Route::get('/peraturan-gubernur', [DocumentController::class, 'peraturanGubernur'])->name('peraturan-gubernur');
+Route::get('/perizinan', [DocumentController::class, 'perIzinan'])->name('perizinan');
+Route::get('/sop', [DocumentController::class, 'SOP'])->name('sop');
+Route::get('/editor/{filename}', [App\Http\Controllers\OnlyOfficeController::class, 'edit'])->name('editor.edit');
+
+//authentification
+
+Route::get('/auth/login-basic', function () {
+    return view('content.authentications.auth-login-basic');
+})->name('login');
+
+// Forgot Password
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Reset Password
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.updates');
 
 // Main Page Route
-Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
-Route::get('/dashboard/analytics', [Analytics::class, 'index'])->name('dashboard-analytics');
+Route::get('/', [HelpCenter::class, 'index'])->name('help-center-landing');
 Route::get('/dashboard/crm', [Crm::class, 'index'])->name('dashboard-crm');
 // locale
 Route::get('/lang/{locale}', [LanguageController::class, 'swap']);
@@ -168,8 +209,8 @@ Route::get('/lang/{locale}', [LanguageController::class, 'swap']);
 Route::get('/layouts/collapsed-menu', [CollapsedMenu::class, 'index'])->name('layouts-collapsed-menu');
 Route::get('/layouts/content-navbar', [ContentNavbar::class, 'index'])->name('layouts-content-navbar');
 Route::get('/layouts/content-nav-sidebar', [ContentNavSidebar::class, 'index'])->name('layouts-content-nav-sidebar');
-Route::get('/layouts/horizontal', [Horizontal::class, 'index'])->name('dashboard-analytics');
-Route::get('/layouts/vertical', [Vertical::class, 'index'])->name('dashboard-analytics');
+Route::get('/layouts/horizontal', [Horizontal::class, 'index'])->name('dashboard-analyticsss');
+Route::get('/layouts/vertical', [Vertical::class, 'index'])->name('dashboard-analyticss');
 Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
 Route::get('/layouts/without-navbar', [WithoutNavbar::class, 'index'])->name('layouts-without-navbar');
 Route::get('/layouts/fluid', [Fluid::class, 'index'])->name('layouts-fluid');
@@ -233,7 +274,12 @@ Route::get('/pages/profile-teams', [UserTeams::class, 'index'])->name('pages-pro
 Route::get('/pages/profile-projects', [UserProjects::class, 'index'])->name('pages-profile-projects');
 Route::get('/pages/profile-connections', [UserConnections::class, 'index'])->name('pages-profile-connections');
 Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])->name('pages-account-settings-account');
-Route::get('/pages/account-settings-security', [AccountSettingsSecurity::class, 'index'])->name('pages-account-settings-security');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pages/account-settings-security', [AccountSettingsSecurity::class, 'index'])->name('pages-account-settings-security');
+    Route::post('/pages/account-settings-security/update-password', [AccountSettingsSecurity::class, 'update'])->name('password.updatesss');
+});
+
 Route::get('/pages/account-settings-billing', [AccountSettingsBilling::class, 'index'])->name('pages-account-settings-billing');
 Route::get('/pages/account-settings-notifications', [AccountSettingsNotifications::class, 'index'])->name('pages-account-settings-notifications');
 Route::get('/pages/account-settings-connections', [AccountSettingsConnections::class, 'index'])->name('pages-account-settings-connections');
@@ -250,106 +296,75 @@ Route::get('/auth/login-basic', [LoginBasic::class, 'index'])->name('auth-login-
 Route::get('/auth/login-cover', [LoginCover::class, 'index'])->name('auth-login-cover');
 Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
 Route::get('/auth/register-cover', [RegisterCover::class, 'index'])->name('auth-register-cover');
+
 Route::get('/auth/register-multisteps', [RegisterMultiSteps::class, 'index'])->name('auth-register-multisteps');
 Route::get('/auth/verify-email-basic', [VerifyEmailBasic::class, 'index'])->name('auth-verify-email-basic');
 Route::get('/auth/verify-email-cover', [VerifyEmailCover::class, 'index'])->name('auth-verify-email-cover');
-Route::get('/auth/reset-password-basic', [ResetPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
+Route::get('/auth/reset-password-basic', [ResetPasswordBasic::class, 'index'])->name('auth-reset-password-basics');
 Route::get('/auth/reset-password-cover', [ResetPasswordCover::class, 'index'])->name('auth-reset-password-cover');
 Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 Route::get('/auth/forgot-password-cover', [ForgotPasswordCover::class, 'index'])->name('auth-forgot-password-cover');
 Route::get('/auth/two-steps-basic', [TwoStepsBasic::class, 'index'])->name('auth-two-steps-basic');
 Route::get('/auth/two-steps-cover', [TwoStepsCover::class, 'index'])->name('auth-two-steps-cover');
+// === AUTH ===
+// Register
+Route::get('/auth/register-basic', [AuthController::class, 'index'])->name('auth-register-basic');
+Route::post('/auth/register-basic', [AuthController::class, 'register'])->name('auth.register-basic');
 
+Route::get('captcha', function () {
+    return captcha_img();
+})->name('captcha');
+// Login
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('throttle:5,1')
+    ->name('auth.login');
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('auth.logout')
+    ->middleware('auth');
+// ================== PUBLIC ROUTE ==================
+Route::get('/documents/{id}', [DocumentController::class, 'show'])->name('documents.show');
+// ================== ADMIN ROUTES ==================
+Route::middleware('auth')->group(function () {
+    Route::middleware('role:admin')
+        ->prefix('admin')
+        ->group(function () {
+            Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
+            Route::get('/documents/verifikasi', [DocumentController::class, 'indexVerifikasiTabs'])->name('documents.verifikasi');
+            Route::get('/documents/verifikasi/{id}', [DocumentController::class, 'showVerifikasi'])->name('documents.showVerifikasi');
+            Route::put('/documents/{id}/update-status-verifikasi', [DocumentController::class, 'updateStatusVerifikasi'])->name('documents.updateStatusVerifikasi');
+            Route::get('/documents/expiring', [DocumentController::class, 'expiring'])->name('documents.expiring');
+            Route::get('/dashboard/analytics/users', [DocumentAnalyticsController::class, 'indexDetailUser'])->name('dashboard.analytics.users');
+            Route::get('/dashboard/analytics/documents', [DocumentAnalyticsController::class, 'indexDetailDokumen'])->name('dashboard.analytics.documents');
+        });
+});
+// ================== MULTI ROUTES ==================
+Route::middleware(['auth', 'role:operator,admin'])
+    ->prefix('manage')
+    ->group(function () {
+        Route::get('/dashboard/analytics', [DocumentAnalyticsController::class, 'index'])->name('dashboard-analytics-pages');
+        Route::resource('status-dokumen', StatusDokumenController::class);
+        
+        // Hati-hati: resource ini jangan override documents.show
+        Route::resource('/documents', DocumentController::class)->except(['show']);
+    });
+
+Route::get('/pages/account-settings-account', [AccountSettingsAccount::class, 'index'])
+    ->name('pages-account-settings-account')
+    ->middleware('auth');
+Route::post('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
+    ->name('account.uploadAvatars')
+    ->middleware('auth');
+Route::get('/account/upload-avatar', [AccountSettingsAccount::class, 'uploadAvatar'])
+    ->name('account.uploadAvatar')
+    ->middleware('auth');
+Route::post('/account/update', [AccountSettingsAccount::class, 'update'])->name('account.update');
+// search
+Route::get('/search', [DocumentController::class, 'search'])->name('search');
 // wizard example
 Route::get('/wizard/ex-checkout', [WizardCheckout::class, 'index'])->name('wizard-ex-checkout');
 Route::get('/wizard/ex-property-listing', [PropertyListing::class, 'index'])->name('wizard-ex-property-listing');
 Route::get('/wizard/ex-create-deal', [CreateDeal::class, 'index'])->name('wizard-ex-create-deal');
 
-// modal
-Route::get('/modal-examples', [ModalExample::class, 'index'])->name('modal-examples');
-
-// cards
-Route::get('/cards/basic', [CardBasic::class, 'index'])->name('cards-basic');
-Route::get('/cards/advance', [CardAdvance::class, 'index'])->name('cards-advance');
-Route::get('/cards/statistics', [CardStatistics::class, 'index'])->name('cards-statistics');
-Route::get('/cards/analytics', [CardAnalytics::class, 'index'])->name('cards-analytics');
-Route::get('/cards/gamifications', [CardGamifications::class, 'index'])->name('cards-gamifications');
-Route::get('/cards/actions', [CardActions::class, 'index'])->name('cards-actions');
-
-// User Interface
-Route::get('/ui/accordion', [Accordion::class, 'index'])->name('ui-accordion');
-Route::get('/ui/alerts', [Alerts::class, 'index'])->name('ui-alerts');
-Route::get('/ui/badges', [Badges::class, 'index'])->name('ui-badges');
-Route::get('/ui/buttons', [Buttons::class, 'index'])->name('ui-buttons');
-Route::get('/ui/carousel', [Carousel::class, 'index'])->name('ui-carousel');
-Route::get('/ui/collapse', [Collapse::class, 'index'])->name('ui-collapse');
-Route::get('/ui/dropdowns', [Dropdowns::class, 'index'])->name('ui-dropdowns');
-Route::get('/ui/footer', [Footer::class, 'index'])->name('ui-footer');
-Route::get('/ui/list-groups', [ListGroups::class, 'index'])->name('ui-list-groups');
-Route::get('/ui/modals', [Modals::class, 'index'])->name('ui-modals');
-Route::get('/ui/navbar', [Navbar::class, 'index'])->name('ui-navbar');
-Route::get('/ui/offcanvas', [Offcanvas::class, 'index'])->name('ui-offcanvas');
-Route::get('/ui/pagination-breadcrumbs', [PaginationBreadcrumbs::class, 'index'])->name('ui-pagination-breadcrumbs');
-Route::get('/ui/progress', [Progress::class, 'index'])->name('ui-progress');
-Route::get('/ui/spinners', [Spinners::class, 'index'])->name('ui-spinners');
-Route::get('/ui/tabs-pills', [TabsPills::class, 'index'])->name('ui-tabs-pills');
-Route::get('/ui/toasts', [Toasts::class, 'index'])->name('ui-toasts');
-Route::get('/ui/tooltips-popovers', [TooltipsPopovers::class, 'index'])->name('ui-tooltips-popovers');
-Route::get('/ui/typography', [Typography::class, 'index'])->name('ui-typography');
-
-// extended ui
-Route::get('/extended/ui-avatar', [Avatar::class, 'index'])->name('extended-ui-avatar');
-Route::get('/extended/ui-blockui', [BlockUI::class, 'index'])->name('extended-ui-blockui');
-Route::get('/extended/ui-drag-and-drop', [DragAndDrop::class, 'index'])->name('extended-ui-drag-and-drop');
-Route::get('/extended/ui-media-player', [MediaPlayer::class, 'index'])->name('extended-ui-media-player');
-Route::get('/extended/ui-perfect-scrollbar', [PerfectScrollbar::class, 'index'])->name('extended-ui-perfect-scrollbar');
-Route::get('/extended/ui-star-ratings', [StarRatings::class, 'index'])->name('extended-ui-star-ratings');
-Route::get('/extended/ui-sweetalert2', [SweetAlert::class, 'index'])->name('extended-ui-sweetalert2');
-Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('extended-ui-text-divider');
-Route::get('/extended/ui-timeline-basic', [TimelineBasic::class, 'index'])->name('extended-ui-timeline-basic');
-Route::get('/extended/ui-timeline-fullscreen', [TimelineFullscreen::class, 'index'])->name('extended-ui-timeline-fullscreen');
-Route::get('/extended/ui-tour', [Tour::class, 'index'])->name('extended-ui-tour');
-Route::get('/extended/ui-treeview', [Treeview::class, 'index'])->name('extended-ui-treeview');
-Route::get('/extended/ui-misc', [Misc::class, 'index'])->name('extended-ui-misc');
-
-// icons
-Route::get('/icons/icons-ri', [RiIcons::class, 'index'])->name('icons-ri');
-
-// form elements
-Route::get('/forms/basic-inputs', [BasicInput::class, 'index'])->name('forms-basic-inputs');
-Route::get('/forms/input-groups', [InputGroups::class, 'index'])->name('forms-input-groups');
-Route::get('/forms/custom-options', [CustomOptions::class, 'index'])->name('forms-custom-options');
-Route::get('/forms/editors', [Editors::class, 'index'])->name('forms-editors');
-Route::get('/forms/file-upload', [FileUpload::class, 'index'])->name('forms-file-upload');
-Route::get('/forms/pickers', [Picker::class, 'index'])->name('forms-pickers');
-Route::get('/forms/selects', [Selects::class, 'index'])->name('forms-selects');
-Route::get('/forms/sliders', [Sliders::class, 'index'])->name('forms-sliders');
-Route::get('/forms/switches', [Switches::class, 'index'])->name('forms-switches');
-Route::get('/forms/extras', [Extras::class, 'index'])->name('forms-extras');
-
-// form layouts
-Route::get('/form/layouts-vertical', [VerticalForm::class, 'index'])->name('form-layouts-vertical');
-Route::get('/form/layouts-horizontal', [HorizontalForm::class, 'index'])->name('form-layouts-horizontal');
-Route::get('/form/layouts-sticky', [StickyActions::class, 'index'])->name('form-layouts-sticky');
-
-// form wizards
-Route::get('/form/wizard-numbered', [FormWizardNumbered::class, 'index'])->name('form-wizard-numbered');
-Route::get('/form/wizard-icons', [FormWizardIcons::class, 'index'])->name('form-wizard-icons');
-Route::get('/form/validation', [Validation::class, 'index'])->name('form-validation');
-
-// tables
-Route::get('/tables/basic', [TablesBasic::class, 'index'])->name('tables-basic');
-Route::get('/tables/datatables-basic', [DatatableBasic::class, 'index'])->name('tables-datatables-basic');
-Route::get('/tables/datatables-advanced', [DatatableAdvanced::class, 'index'])->name('tables-datatables-advanced');
-Route::get('/tables/datatables-extensions', [DatatableExtensions::class, 'index'])->name('tables-datatables-extensions');
-
-// charts
-Route::get('/charts/apex', [ApexCharts::class, 'index'])->name('charts-apex');
-Route::get('/charts/chartjs', [ChartJs::class, 'index'])->name('charts-chartjs');
-
-// maps
-Route::get('/maps/leaflet', [Leaflet::class, 'index'])->name('maps-leaflet');
-
-// laravel example
-Route::get('/laravel/user-management', [UserManagement::class, 'UserManagement'])->name('laravel-example-user-management');
 Route::resource('/user-list', UserManagement::class);

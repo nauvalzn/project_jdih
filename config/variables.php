@@ -3,8 +3,8 @@
 return [
     'creatorName' => 'Pixinvent',
     'creatorUrl' => 'https://pixinvent.com',
-    'templateName' => '',
-    'templateSuffix' => 'Bootstrap Admin Template',
+    'templateName' => 'JDIH RSKK - PROVINSI JAWA BARAT',
+    'templateSuffix' => 'ADMIN JDIH',
     'templateVersion' => '3.0.0',
     'templateFree' => false,
     'templateDescription' => 'Start your development with a Dashboard for Bootstrap 5',

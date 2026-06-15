@@ -20,9 +20,9 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
           <i class="icon-base ri ri-menu-fill icon-lg align-middle text-heading fw-medium"></i>
         </button>
         <!-- Mobile menu toggle: End-->
-        <a href="{{ url('front-pages/landing') }}" class="app-brand-link">
+        <a href="{{ url('/') }}" class="app-brand-link">
           <span class="app-brand-logo demo">@include('_partials.macros')</span>
-          <span class="app-brand-text demo menu-text fw-semibold ms-2 ps-1">{{ config('variables.templateName') }}</span>
+          {{-- <span class="app-brand-text demo menu-text fw-semibold ms-2 ps-1">{{ config('variables.templateName') }}</span> --}}
         </a>
       </div>
       <!-- Menu logo wrapper: End -->
@@ -33,23 +33,23 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
         </button>
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link fw-medium" aria-current="page" href="{{ url('front-pages/landing') }}#landingHero">Home</a>
+            <a class="nav-link fw-medium" aria-current="page" href="{{ url('/') }}#HalamanAwal">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ url('front-pages/landing') }}#landingFeatures">Features</a>
+            <a class="nav-link disabled text-secondary fw-medium" href="{{ url('#') }}#landingFeatures">Fitur 1</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ url('front-pages/landing') }}#landingTeam">Team</a>
+            <a class="nav-link disabled text-secondary fw-medium" href="{{ url('#') }}#landingTeam">Fitur 2</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ url('front-pages/landing') }}#landingFAQ">FAQ</a>
+            <a class="nav-link disabled text-secondary fw-medium" href="{{ url('#') }}#landingFAQ">Fitur 3</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ url('front-pages/landing') }}#landingContact">Contact us</a>
+            <a class="nav-link disabled text-secondary fw-medium" href="{{ url('#') }}#landingContact">FItur 4</a>
           </li>
-          <li class="nav-item mega-dropdown {{ $activeClass }}">
-            <a href="javascript:void(0);" class="nav-link dropdown-toggle navbar-ex-14-mega-dropdown mega-dropdown fw-medium" aria-expanded="false" data-bs-toggle="mega-dropdown" data-trigger="hover">
-              <span>Pages</span>
+          <li class="nav-item mega-dropdown{{ $activeClass }}">
+            <a href="javascript:void(0);" class="nav-link disabled text-secondary dropdown-toggle navbar-ex-14-mega-dropdown mega-dropdown fw-medium" aria-expanded="false" data-bs-toggle="mega-dropdown" data-trigger="hover">
+              <span>Fitur Dropdown</span>
             </a>
             <div class="dropdown-menu p-4 p-xl-8">
               <div class="row gy-4">
@@ -217,9 +217,9 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
               </div>
             </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link fw-medium" href="{{ url('/') }}" target="_blank">Admin</a>
-          </li>
+          {{-- <li class="nav-item">
+            <a class="nav-link fw-medium" href="{{ url('/dashboard/analytics') }}" target="_blank">Admin</a>
+          </li> --}}
         </ul>
       </div>
       <div class="landing-menu-overlay d-lg-none"></div>
@@ -256,7 +256,7 @@ $activeClass = in_array($currentRouteName, $activeRoutes) ? 'active' : '';
 
         <!-- navbar button: Start -->
         <li>
-          <a href="{{ url('/auth/login-cover') }}" class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4" target="_blank"><span class="icon-base ri ri-user-line me-md-1"></span><span class="d-none d-md-block">Login/Register</span></a>
+          <a href="{{ url('/login') }}" class="btn btn-primary px-2 px-sm-4 px-lg-2 px-xl-4" target="_blank"><span class="icon-base ri ri-user-line me-md-1"></span><span class="d-none d-md-block">Login/Register</span></a>
         </li>
         <!-- navbar button: End -->
       </ul>
